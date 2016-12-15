@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <ImageView
+            android:id="@+id/containerImageView"
+            android:layout_width="match_parent"
+            tools:src="@drawable/landing_1"
+            android:scaleType="fitXY"
+            android:layout_height="match_parent"/>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/filteringView"
+            android:background="@color/black_60"/>
+
+    <TextView
+            android:id="@+id/appNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_marginTop="@dimen/spacing_max"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:textSize="@dimen/text_big"/>
+
+    <TextView
+            android:id="@+id/descriptionText"
+            android:layout_width="wrap_content"
+            tools:text="@string/desc_1"
+            android:textSize="@dimen/text_medium"
+            android:layout_marginTop="@dimen/spacing_max"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appNameTextView"
+            android:layout_alignLeft="@+id/subDescriptionText"
+            android:layout_alignStart="@+id/subDescriptionText"/>
+    <TextView
+            android:id="@+id/subDescriptionText"
+            android:layout_width="@dimen/dimen_250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_below="@+id/descriptionText"
+            android:text="@string/sub_desc_1"
+            android:textSize="@dimen/text_15"
+            android:layout_marginTop="@dimen/spacing_micro"
+    />
+
+
+</RelativeLayout>

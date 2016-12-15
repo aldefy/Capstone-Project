@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="false"
+        android:layout_height="match_parent">
+    <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager android:layout_width="match_parent"
+                                           android:id="@+id/pagerContainer"
+                                           android:layout_height="match_parent"/>
+        <RadioGroup
+                android:id="@+id/viewPagerCountDots"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/startBtn"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginLeft="@dimen/spacing_large"
+                android:layout_marginRight="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
+                android:weightSum="3"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_marginBottom="@dimen/spacing_large">
+            <RadioButton
+                    android:id="@+id/radioBtnOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_normal"
+                    android:checked="true"
+                    android:layout_weight="1"
+                    android:button="@drawable/dots_selector"/>
+
+            <RadioButton
+                    android:id="@+id/radioBtnTwo"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_normal"
+                    android:button="@drawable/dots_selector"/>
+
+            <RadioButton
+                    android:id="@+id/radioBtnThree"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_normal"
+                    android:button="@drawable/dots_selector"/>
+        </RadioGroup>
+        <Button
+                android:id="@+id/startBtn"
+                android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:layout_marginStart="@dimen/spacing_large"
+                android:layout_marginLeft="@dimen/spacing_large"
+                android:layout_marginRight="@dimen/spacing_large"
+                android:layout_marginEnd="@dimen/spacing_large"
+                android:background="@drawable/btn_landing_selector"
+                android:text="@string/getting_started"
+                android:textColor="@color/black_87"
+                android:layout_height="@dimen/spacing_xlarge"/>
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
