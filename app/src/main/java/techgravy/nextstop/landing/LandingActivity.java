@@ -1,5 +1,6 @@
 package techgravy.nextstop.landing;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -50,7 +51,6 @@ public class LandingActivity extends AppCompatActivity {
             // Set the status bar to dark-semi-transparentish
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
         }
         setContentView(R.layout.activity_landing);
         ButterKnife.bind(this);
@@ -86,6 +86,7 @@ public class LandingActivity extends AppCompatActivity {
 
             }
         });
+        startBtn.setOnClickListener(view -> startActivity(new Intent(LandingActivity.this, OnBoardingActivity.class)));
     }
 
     Timer timer;
