@@ -1,12 +1,20 @@
 package techgravy.nextstop;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import com.facebook.FacebookSdk;
+import com.beltaief.reactivefb.ReactiveFB;
+import com.beltaief.reactivefb.SimpleFacebookConfiguration;
+import com.beltaief.reactivefb.util.PermissionHelper;
+import com.facebook.login.DefaultAudience;
 
 import net.danlew.android.joda.JodaTimeAndroid;
+
+import techgravy.nextstop.utils.logger.LoggerTree;
+import timber.log.Timber;
 
 /**
  * Created by aditlal on 13/12/16.
@@ -34,9 +42,26 @@ public class NSApplication extends MultiDexApplication {
         JodaTimeAndroid.init(getApplicationContext());
 
         /*
-            Facebook helper
+            Reactive Facebook init
          */
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        // define list of permissions
+        PermissionHelper[] permissions = new PermissionHelper[]{
+                PermissionHelper.USER_ABOUT_ME,
+                PermissionHelper.EMAIL,
+                PermissionHelper.USER_FRIENDS,
+                PermissionHelper.USER_BIRTHDAY,
+                PermissionHelper.USER_TAGGED_PLACES,
+                PermissionHelper.PUBLISH_ACTION};
+        // add permission to a configuration
+        SimpleFacebookConfiguration configuration = new SimpleFacebookConfiguration.Builder()
+                .setAppId(String.valueOf(R.string.facebook_app_id))
+                .setPermissions(permissions)
+                .setDefaultAudience(DefaultAudience.FRIENDS)
+                .setAskForAllPermissionsAtOnce(false)
+                .build();
+        // init lib
+        ReactiveFB.sdkInitialize(this);
+        ReactiveFB.setConfiguration(configuration);
 
         /*
             Init NetModule
@@ -46,6 +71,19 @@ public class NSApplication extends MultiDexApplication {
                 .appModule(new AppModule(this)) // This also corresponds to the name of your module: %component_name%Module
                 .netModule(new NetModule(""))
                 .build();
+
+         /*
+          Logging init
+         */
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new LoggerTree());
+            Timber.tag("NextStop");
+        }
+
+        /*
+           Database Firebase
+         */
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     public NetComponent getmNetComponent() {

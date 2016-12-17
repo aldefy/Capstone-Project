@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import techgravy.nextstop.data.SharedPrefManager;
 
 
 @Module
@@ -23,5 +24,12 @@ public class AppModule {
         return mApplication;
     }
 
+
+    @Provides
+    @Singleton
+        // Application reference must come from AppModule.class
+    SharedPrefManager providesSharedPreferences(Application application) {
+        return SharedPrefManager.getInstance(application);
+    }
 
 }

@@ -13,7 +13,6 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import techgravy.nextstop.data.SharedPrefManager;
 import timber.log.Timber;
 
 /**
@@ -31,12 +30,6 @@ public class NetModule {
     }
 
     // Dagger will only look for methods annotated with @Provides
-    @Provides
-    @Singleton
-    // Application reference must come from AppModule.class
-    SharedPrefManager providesSharedPreferences(Application application) {
-        return SharedPrefManager.getInstance(application);
-    }
 
     @Provides
     @Singleton

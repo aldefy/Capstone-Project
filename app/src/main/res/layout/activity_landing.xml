@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
         android:fitsSystemWindows="false"
         android:layout_height="match_parent">
     <RelativeLayout
@@ -60,8 +60,7 @@
                 android:layout_marginRight="@dimen/spacing_large"
                 android:layout_marginEnd="@dimen/spacing_large"
                 android:background="@drawable/btn_landing_selector"
-                android:text="@string/getting_started"
-                android:textColor="@color/black_87"
+                android:text="@string/fb_start"
                 android:layout_height="@dimen/spacing_xlarge"/>
 
     </RelativeLayout>
