@@ -5,7 +5,7 @@ import com.google.firebase.database.PropertyName;
 
 import java.util.List;
 
-import techgravy.nextstop.landing.PersonaTags;
+import techgravy.nextstop.ui.landing.PersonaTags;
 
 /**
  * Created by aditlal on 17/12/16 - 17.

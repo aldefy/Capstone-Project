@@ -6,13 +6,13 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import techgravy.nextstop.data.SharedPrefManager;
+import techgravy.nextstop.NSApplication;
 
 
 @Module
 public class AppModule {
 
-    NSApplication mApplication;
+    private NSApplication mApplication;
 
     public AppModule(NSApplication application) {
         mApplication = application;
@@ -20,16 +20,9 @@ public class AppModule {
 
     @Provides
     @Singleton
-    Application providesApplication() {
+    public Application providesApplication() {
         return mApplication;
     }
 
-
-    @Provides
-    @Singleton
-        // Application reference must come from AppModule.class
-    SharedPrefManager providesSharedPreferences(Application application) {
-        return SharedPrefManager.getInstance(application);
-    }
 
 }

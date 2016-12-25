@@ -1,7 +1,5 @@
 package techgravy.nextstop;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -10,6 +8,7 @@ import com.beltaief.reactivefb.ReactiveFB;
 import com.beltaief.reactivefb.SimpleFacebookConfiguration;
 import com.beltaief.reactivefb.util.PermissionHelper;
 import com.facebook.login.DefaultAudience;
+import com.google.firebase.database.FirebaseDatabase;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -71,6 +70,7 @@ public class NSApplication extends MultiDexApplication {
                 .appModule(new AppModule(this)) // This also corresponds to the name of your module: %component_name%Module
                 .netModule(new NetModule(""))
                 .build();
+
 
          /*
           Logging init

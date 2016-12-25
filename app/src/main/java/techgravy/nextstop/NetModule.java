@@ -33,7 +33,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Cache provideOkHttpCache(Application application) {
+    public Cache provideOkHttpCache(Application application) {
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
         Cache cache = new Cache(application.getCacheDir(), cacheSize);
         return cache;
@@ -42,7 +42,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(Cache cache) {
+    public OkHttpClient provideOkHttpClient(Cache cache) {
         // create an instance of OkLogInterceptor using a builder()
         OkLogInterceptor okLogInterceptor =
                 OkLogInterceptor.builder()
@@ -58,7 +58,7 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+    public  Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(LoganSquareConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
