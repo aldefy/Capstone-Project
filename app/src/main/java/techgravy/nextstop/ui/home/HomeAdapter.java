@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,7 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.R;
 import techgravy.nextstop.ui.home.model.Places;
-import techgravy.nextstop.utils.ViewUtils;
 
 /**
  * Created by aditlal on 24/12/16.
@@ -43,7 +41,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        runEnterAnimation(holder.itemView, position);
         Places places = mPlacesList.get(position);
         Glide.with(mContext).load(places.getPhotos().get(0)).into(holder.mPlaceImageView);
         holder.mPlaceNameTextView.setText(places.getPlace());
@@ -54,24 +51,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return mPlacesList.size();
     }
 
-    private int lastAnimatedPosition = -1;
-    private static final int ANIMATED_ITEMS_COUNT = 5;
-
-    private void runEnterAnimation(View view, int position) {
-        if (position >= ANIMATED_ITEMS_COUNT - 1) {
-            return;
-        }
-
-        if (position > lastAnimatedPosition) {
-            lastAnimatedPosition = position;
-            view.setTranslationY(ViewUtils.getScreenHeight(mContext));
-            view.animate()
-                    .translationY(0)
-                    .setInterpolator(new DecelerateInterpolator(3.f))
-                    .setDuration(700)
-                    .start();
-        }
-    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.placeImageView)

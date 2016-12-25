@@ -123,8 +123,8 @@ public class HomeActivity extends AppCompatActivity
             title.animate()
                     .alpha(1f)
                     .scaleX(1f)
-                    .setStartDelay(300)
-                    .setDuration(300)
+                    .setStartDelay(50)
+                    .setDuration(200)
                     .setInterpolator(AnimUtils.getLinearOutSlowInInterpolator(this));
         }
     }
