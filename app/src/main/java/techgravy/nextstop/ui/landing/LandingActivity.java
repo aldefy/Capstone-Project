@@ -138,7 +138,7 @@ public class LandingActivity extends AppCompatActivity {
 
         });
 
-        Subscription startBtnSub = RxView.clicks(startBtn).subscribe(view -> authWithFacebook());
+        Subscription startBtnSub = RxView.clicks(startBtn).subscribe(view -> LandingActivity.this.authWithFacebook());
         compositeSubscription.add(startBtnSub);
     }
 

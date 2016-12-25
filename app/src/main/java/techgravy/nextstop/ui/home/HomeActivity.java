@@ -49,6 +49,7 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
+import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
@@ -405,4 +406,33 @@ public class HomeActivity extends AppCompatActivity
             connected = false;
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null || resultCode != RESULT_OK
+                || !data.hasExtra(DetailsCityActivity.RESULT_EXTRA_PLACES_ID)) return;
+
+        // When reentering, if the shared element is no longer on screen (e.g. after an
+        // orientation change) then scroll it into view.
+        final String placeId = data.getStringExtra(DetailsCityActivity.RESULT_EXTRA_PLACES_ID);
+        if (placeId.isEmpty()                                             // returning from a shot
+                && mHomeAdapter.getItemCount() > 0) {                           // adapter populated {    // view not attached
+            final int position = mHomeAdapter.getItemPosition(placeId);
+            if (position == RecyclerView.NO_POSITION) return;
+
+            // delay the transition until our shared element is on-screen i.e. has been laid out
+            postponeEnterTransition();
+            mPlacesRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int l, int t, int r, int b,
+                                           int oL, int oT, int oR, int oB) {
+                    mPlacesRecyclerView.removeOnLayoutChangeListener(this);
+                    startPostponedEnterTransition();
+                }
+            });
+            mPlacesRecyclerView.scrollToPosition(position);
+            mToolbar.setTranslationZ(-1f);
+
+        }
+    }
 }

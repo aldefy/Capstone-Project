@@ -1,28 +1,35 @@
 package techgravy.nextstop.ui.home;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.R;
+import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.ui.transitions.ReflowText;
 
 /**
  * Created by aditlal on 24/12/16.
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+    private static final int REQUEST_PLACE = 523; //Request code , random
     private List<Places> mPlacesList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -30,6 +37,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private final Activity host;
 
     public HomeAdapter(Context context, List<Places> placesList) {
+        setHasStableIds(true);
         this.mPlacesList = placesList;
         this.host = (Activity) context;
         this.mContext = context;
@@ -40,22 +48,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewHolder holder = new ViewHolder(mLayoutInflater.inflate(R.layout.item_home, parent, false));
-       /* RxView.clicks(holder.itemView).subscribe(new Action1<Void>() {
-            @Override
-            public void call(Void aVoid) {
-                Intent intent = new Intent();
-                intent.setClass(host, DetailsCityActivity.class);
-                intent.putExtra(DetailsCityActivity.EXTRA_PLACE,
-                        (Places) getItem(holder.getAdapterPosition()));
-                setGridItemContentTransitions(holder.image);
-                ActivityOptions options =
-                        ActivityOptions.makeSceneTransitionAnimation(host,
-                                Pair.create(view, host.getString(R.string.transition_shot)),
-                                Pair.create(view, host.getString(R.string
-                                        .transition_shot_background)));
-                host.startActivityForResult(intent, REQUEST_CODE_VIEW_SHOT, options.toBundle());
-            }
-        });*/
+        holder.itemView.setOnClickListener(view -> {
+            Places places = getItem(holder.getAdapterPosition());
+            Intent intent = new Intent();
+            intent.setClass(host, DetailsCityActivity.class);
+            intent.putExtra(DetailsCityActivity.EXTRA_PLACE, places);
+            ImageView imageView = (ImageView) view.findViewById(R.id.placeImageView);
+            AppCompatTextView textView = (AppCompatTextView) view.findViewById(R.id.placeNameTextView);
+            ReflowText.addExtras(
+                    intent,
+                    new ReflowText.ReflowableTextView(textView));
+            ActivityOptions options =
+                    ActivityOptions.makeSceneTransitionAnimation(host, Pair.create(imageView, imageView.getTransitionName()),
+                            Pair.create(textView, textView.getTransitionName()));
+            host.startActivityForResult(intent, REQUEST_PLACE, options.toBundle());
+        });
 
         return holder;
     }
@@ -63,8 +70,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Places places = getItem(position);
-        Glide.with(mContext).load(places.getPhotos().get(0)).into(holder.mPlaceImageView);
-        holder.mPlaceNameTextView.setText(places.getPlace());
+        Glide.with(mContext).load(places.photos().get(0)).diskCacheStrategy(DiskCacheStrategy.RESULT).into(holder.mPlaceImageView);
+        holder.mPlaceNameTextView.setText(places.place());
     }
 
     @Override
@@ -74,6 +81,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     private Places getItem(int position) {
         return mPlacesList.get(position);
+    }
+
+    public int getItemPosition(final String itemId) {
+        for (int position = 0; position < mPlacesList.size(); position++) {
+            if (getItem(position).place_id().equals(itemId)) return position;
+        }
+        return RecyclerView.NO_POSITION;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

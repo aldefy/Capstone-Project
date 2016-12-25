@@ -12,7 +12,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import techgravy.nextstop.ui.home.model.AutoJson_Places;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.utils.FirebaseJSONUtil;
 
 /**
  * Created by aditlal on 24/12/16.
@@ -41,7 +43,7 @@ class HomePresenter implements HomeContract.Presenter {
                     try {
                         List<Places> placesList = new ArrayList<Places>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Places places = snapshot.getValue(Places.class);
+                            Places places = FirebaseJSONUtil.deserialize(snapshot, AutoJson_Places.class);
                             placesList.add(places);
                         }
                         mHomeView.attachData(placesList);
