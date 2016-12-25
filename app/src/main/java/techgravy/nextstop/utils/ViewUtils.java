@@ -3,6 +3,7 @@ package techgravy.nextstop.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.WindowManager;
@@ -16,6 +17,14 @@ public class ViewUtils {
         Resources r = context.getResources();
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
         return (int) px;
+    }
+
+    public static int getActionBarSize(@NonNull Context context) {
+        TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.actionBarSize, value, true);
+        int actionBarSize = TypedValue.complexToDimensionPixelSize(
+                value.data, context.getResources().getDisplayMetrics());
+        return actionBarSize;
     }
 
     public static int getStatusBarHeight(Context context) {

@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_180dp"
         android:clickable="false"
+        android:transitionName="toolbarImage"
         android:scaleType="center"
         tools:src="@drawable/landing_3"/>
 

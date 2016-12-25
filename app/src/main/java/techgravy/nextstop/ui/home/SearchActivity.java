@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package techgravy.nextstop.ui.search;
+package techgravy.nextstop.ui.home;
 
 import android.app.Activity;
 import android.app.SearchManager;
