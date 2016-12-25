@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Created by aditlal on 23/12/16.
  */
+
 public class Places {
     private String place_id;
     private String picturesque;

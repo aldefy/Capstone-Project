@@ -35,6 +35,7 @@ public class NSApplication extends MultiDexApplication {
     }
 
     private void setupDependencies() {
+
         /*
             Joda Android Init
          */
