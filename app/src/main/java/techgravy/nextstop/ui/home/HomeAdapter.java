@@ -1,12 +1,8 @@
 package techgravy.nextstop.ui.home;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,26 +16,22 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.R;
-import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
-import techgravy.nextstop.ui.transitions.ReflowText;
 
 /**
  * Created by aditlal on 24/12/16.
  */
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
-    private static final int REQUEST_PLACE = 523; //Request code , random
     private List<Places> mPlacesList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    // we need to hold on to an activity ref for the shared element transitions :/
-    private final Activity host;
+    private PlaceAdapterClickInterface mPlaceAdapterClickInterface;
 
     public HomeAdapter(Context context, List<Places> placesList) {
         setHasStableIds(true);
         this.mPlacesList = placesList;
-        this.host = (Activity) context;
+        this.mPlaceAdapterClickInterface = (PlaceAdapterClickInterface) context;
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -47,45 +39,35 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(mLayoutInflater.inflate(R.layout.item_home, parent, false));
-        holder.itemView.setOnClickListener(view -> {
-            Places places = getItem(holder.getAdapterPosition());
-            Intent intent = new Intent();
-            intent.setClass(host, DetailsCityActivity.class);
-            intent.putExtra(DetailsCityActivity.EXTRA_PLACE, places);
-            ImageView imageView = (ImageView) view.findViewById(R.id.placeImageView);
-            AppCompatTextView textView = (AppCompatTextView) view.findViewById(R.id.placeNameTextView);
-            ReflowText.addExtras(
-                    intent,
-                    new ReflowText.ReflowableTextView(textView));
-            ActivityOptions options =
-                    ActivityOptions.makeSceneTransitionAnimation(host, Pair.create(imageView, imageView.getTransitionName()),
-                            Pair.create(textView, textView.getTransitionName()));
-            host.startActivityForResult(intent, REQUEST_PLACE, options.toBundle());
-        });
-
-        return holder;
+        return new ViewHolder(mLayoutInflater.inflate(R.layout.item_home, parent, false), mPlaceAdapterClickInterface);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Places places = getItem(position);
+        Places places = getItemAtPosition(position);
         Glide.with(mContext).load(places.photos().get(0)).diskCacheStrategy(DiskCacheStrategy.RESULT).into(holder.mPlaceImageView);
+        holder.itemView.setTag(places);
         holder.mPlaceNameTextView.setText(places.place());
     }
+
+    @Override
+    public long getItemId(int position) {
+        return getItemAtPosition(position).hashCode();
+    }
+
+    private Places getItemAtPosition(int position) {
+        return mPlacesList.get(position);
+    }
+
 
     @Override
     public int getItemCount() {
         return mPlacesList.size();
     }
 
-    private Places getItem(int position) {
-        return mPlacesList.get(position);
-    }
-
-    public int getItemPosition(final String itemId) {
+    public int getItemPosition(final int itemHashCode) {
         for (int position = 0; position < mPlacesList.size(); position++) {
-            if (getItem(position).place_id().equals(itemId)) return position;
+            if (getItemAtPosition(position).hashCode() == itemHashCode) return position;
         }
         return RecyclerView.NO_POSITION;
     }
@@ -96,9 +78,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         @BindView(R.id.placeNameTextView)
         AppCompatTextView mPlaceNameTextView;
 
-        ViewHolder(View view) {
+        ViewHolder(View view, PlaceAdapterClickInterface placeAdapterClickInterface) {
             super(view);
             ButterKnife.bind(this, view);
+            itemView.setOnClickListener(view1 -> {
+                Places places = (Places) view1.getTag();
+                ImageView imageView = (ImageView) view1.findViewById(R.id.placeImageView);
+                AppCompatTextView textView = (AppCompatTextView) view1.findViewById(R.id.placeNameTextView);
+                placeAdapterClickInterface.itemClicked(places, imageView, textView);
+            });
+
         }
+    }
+
+    public interface PlaceAdapterClickInterface {
+        void itemClicked(Places places, View imageView, View textView);
     }
 }

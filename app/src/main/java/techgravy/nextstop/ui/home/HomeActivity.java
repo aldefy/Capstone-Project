@@ -21,6 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionManager;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,6 +52,7 @@ import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.ui.transitions.ReflowText;
 import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
 import techgravy.nextstop.utils.ViewUtils;
@@ -60,7 +62,7 @@ import static techgravy.nextstop.R.id.fab;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomeContract.View {
+        implements NavigationView.OnNavigationItemSelectedListener, HomeContract.View, HomeAdapter.PlaceAdapterClickInterface {
 
     private static final int RC_SEARCH = 0;
     private static final String TAG = "HOME";
@@ -324,7 +326,8 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void attachData(List<Places> placesList) {
-        Timber.d(placesList.toString());
+        for (Places places : placesList)
+            Timber.d(places.place());
         mPlacesList.addAll(placesList);
         mHomeAdapter.notifyDataSetChanged();
     }
@@ -389,15 +392,12 @@ public class HomeActivity extends AppCompatActivity
         public void onAvailable(Network network) {
             connected = true;
             if (mHomeAdapter.getItemCount() != 0) return;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    TransitionManager.beginDelayedTransition(mDrawerLayout);
-                    noConnection.setVisibility(View.GONE);
-                    mLoading.setVisibility(View.VISIBLE);
-                    showFab();
-                    //mHomePresenter.fetchListOfPlaces();
-                }
+            runOnUiThread(() -> {
+                TransitionManager.beginDelayedTransition(mDrawerLayout);
+                noConnection.setVisibility(View.GONE);
+                mLoading.setVisibility(View.VISIBLE);
+                showFab();
+                //mHomePresenter.fetchListOfPlaces();
             });
         }
 
@@ -414,10 +414,10 @@ public class HomeActivity extends AppCompatActivity
 
         // When reentering, if the shared element is no longer on screen (e.g. after an
         // orientation change) then scroll it into view.
-        final String placeId = data.getStringExtra(DetailsCityActivity.RESULT_EXTRA_PLACES_ID);
-        if (placeId.isEmpty()                                             // returning from a shot
+        final int hashcode = data.getIntExtra(DetailsCityActivity.RESULT_EXTRA_PLACES_ID,-1);
+        if (hashcode != -1                                             // returning from a shot
                 && mHomeAdapter.getItemCount() > 0) {                           // adapter populated {    // view not attached
-            final int position = mHomeAdapter.getItemPosition(placeId);
+            final int position = mHomeAdapter.getItemPosition(hashcode);
             if (position == RecyclerView.NO_POSITION) return;
 
             // delay the transition until our shared element is on-screen i.e. has been laid out
@@ -434,5 +434,21 @@ public class HomeActivity extends AppCompatActivity
             mToolbar.setTranslationZ(-1f);
 
         }
+    }
+
+    private static final int REQUEST_PLACE = 523; //Request code , random
+
+    @Override
+    public void itemClicked(Places places, View imageView, View textView) {
+        Intent intent = new Intent();
+        intent.setClass(HomeActivity.this, DetailsCityActivity.class);
+        intent.putExtra(DetailsCityActivity.EXTRA_PLACE, places);
+        ReflowText.addExtras(
+                intent,
+                new ReflowText.ReflowableTextView((TextView) textView));
+        ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, Pair.create(imageView, imageView.getTransitionName()),
+                        Pair.create(textView, textView.getTransitionName()));
+        startActivityForResult(intent, REQUEST_PLACE, options.toBundle());
     }
 }

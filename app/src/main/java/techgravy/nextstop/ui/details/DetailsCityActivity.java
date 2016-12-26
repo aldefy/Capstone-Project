@@ -159,7 +159,7 @@ public class DetailsCityActivity extends AppCompatActivity {
 
     void setResultAndFinish() {
         final Intent resultData = new Intent();
-        resultData.putExtra(RESULT_EXTRA_PLACES_ID, mPlaces.place_id());
+        resultData.putExtra(RESULT_EXTRA_PLACES_ID, mPlaces.hashCode());
         setResult(RESULT_OK, resultData);
         finishAfterTransition();
     }
