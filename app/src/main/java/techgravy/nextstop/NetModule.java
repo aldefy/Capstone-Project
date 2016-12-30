@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.github.simonpercic.oklog3.OkLogInterceptor;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import javax.inject.Singleton;
 
@@ -12,7 +13,6 @@ import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import timber.log.Timber;
 
 /**
@@ -23,10 +23,12 @@ import timber.log.Timber;
 public class NetModule {
 
     private String mBaseUrl;
+    private String mApiKey;
 
     // Constructor needs one parameter to instantiate.
-    public NetModule(String baseUrl) {
+    public NetModule(String baseUrl, String apiKey) {
         this.mBaseUrl = baseUrl;
+        this.mApiKey = apiKey;
     }
 
     // Dagger will only look for methods annotated with @Provides
@@ -35,8 +37,7 @@ public class NetModule {
     @Singleton
     public Cache provideOkHttpCache(Application application) {
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(application.getCacheDir(), cacheSize);
-        return cache;
+        return new Cache(application.getCacheDir(), cacheSize);
     }
 
 
@@ -58,13 +59,19 @@ public class NetModule {
 
     @Provides
     @Singleton
-    public  Retrofit provideRetrofit(OkHttpClient okHttpClient) {
+    public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(LoganSquareConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(mBaseUrl)
                 .client(okHttpClient)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    public String provideApiKey() {
+        return mApiKey;
     }
 
 }

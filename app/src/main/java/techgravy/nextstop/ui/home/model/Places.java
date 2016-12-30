@@ -8,7 +8,7 @@ import com.google.firebase.database.PropertyName;
 import java.util.List;
 
 import auto.json.AutoJson;
-import techgravy.nextstop.utils.PlacesLatLngConventer;
+import techgravy.nextstop.utils.PlacesLatLngConverter;
 
 /**
  * Created by aditlal on 23/12/16.
@@ -24,7 +24,7 @@ public abstract class Places implements Parcelable {
     @AutoJson.Field
     public abstract String desc();
 
-    @AutoJson.Field(name = "location", typeConverter = PlacesLatLngConventer.class)
+    @AutoJson.Field(name = "location", typeConverter = PlacesLatLngConverter.class)
     @PropertyName("location")
     public abstract PlaceLatLng location();
 

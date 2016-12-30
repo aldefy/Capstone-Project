@@ -7,11 +7,14 @@ import android.support.multidex.MultiDexApplication;
 import com.beltaief.reactivefb.ReactiveFB;
 import com.beltaief.reactivefb.SimpleFacebookConfiguration;
 import com.beltaief.reactivefb.util.PermissionHelper;
+import com.bluelinelabs.logansquare.LoganSquare;
 import com.facebook.login.DefaultAudience;
 import com.google.firebase.database.FirebaseDatabase;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import techgravy.nextstop.ui.home.model.PlaceLatLng;
+import techgravy.nextstop.utils.PlacesLatLngConverter;
 import techgravy.nextstop.utils.logger.LoggerTree;
 import timber.log.Timber;
 
@@ -21,6 +24,12 @@ import timber.log.Timber;
 
 public class NSApplication extends MultiDexApplication {
     private NetComponent mNetComponent;
+    public static NSApplication mNSApplication;
+
+    public static NSApplication getInstance() {
+        return mNSApplication;
+    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -31,11 +40,12 @@ public class NSApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        mNSApplication = this;
         setupDependencies();
     }
 
     private void setupDependencies() {
-
+        LoganSquare.registerTypeConverter(PlaceLatLng.class, new PlacesLatLngConverter());
         /*
             Joda Android Init
          */
@@ -69,7 +79,7 @@ public class NSApplication extends MultiDexApplication {
         mNetComponent = DaggerNetComponent.builder()
                 // list of modules that are part of this component need to be created here too
                 .appModule(new AppModule(this)) // This also corresponds to the name of your module: %component_name%Module
-                .netModule(new NetModule(""))
+                .netModule(new NetModule(BuildConfig.GOOGLE_URL,BuildConfig.GOOGLE_API_KEY))
                 .build();
 
 

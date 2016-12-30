@@ -54,6 +54,7 @@ public class GlideConfiguration implements GlideModule {
         // set size & external vs. internal
         int cacheSize100MegaBytes = 104857600;
 
+
         builder.setDiskCache(
                 new InternalCacheDiskCacheFactory(context, cacheSize100MegaBytes));
     }

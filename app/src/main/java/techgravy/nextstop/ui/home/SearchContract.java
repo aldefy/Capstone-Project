@@ -2,7 +2,7 @@ package techgravy.nextstop.ui.home;
 
 import java.util.List;
 
-import techgravy.nextstop.ui.home.model.SearchPlaceModel;
+import techgravy.nextstop.ui.home.model.SearchResults;
 
 /**
  * Created by aditlal on 26/12/16.
@@ -10,9 +10,13 @@ import techgravy.nextstop.ui.home.model.SearchPlaceModel;
 
 public interface SearchContract {
     public interface View {
-        void showResults(List<SearchPlaceModel> results);
+        void showResults(List<SearchResults> results);
 
         void searchError(String errorMsg);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     public interface Presenter {

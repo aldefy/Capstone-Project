@@ -9,10 +9,10 @@ import auto.json.AutoJson;
  */
 @AutoJson
 public abstract class PlaceLatLng implements Parcelable {
-    @AutoJson.Field
+    @AutoJson.Field(name = "lng")
     public abstract Double lng();
 
-    @AutoJson.Field
+    @AutoJson.Field(name = "lat")
     public abstract Double lat();
 
     @AutoJson.Builder

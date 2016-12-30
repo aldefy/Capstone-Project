@@ -25,6 +25,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.TransitionRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
@@ -37,56 +38,67 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import techgravy.nextstop.NSApplication;
 import techgravy.nextstop.R;
+import techgravy.nextstop.ui.home.model.SearchResults;
 import techgravy.nextstop.ui.transitions.CircularReveal;
 import techgravy.nextstop.utils.ImeUtils;
 import techgravy.nextstop.utils.TransitionsUtil;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Activity implements SearchContract.View {
 
     public static final String EXTRA_QUERY = "EXTRA_QUERY";
     public static final String EXTRA_SAVE_DRIBBBLE = "EXTRA_SAVE_DRIBBBLE";
     public static final String EXTRA_SAVE_DESIGNER_NEWS = "EXTRA_SAVE_DESIGNER_NEWS";
     public static final int RESULT_CODE_SAVE = 7;
-
-    @BindView(R.id.searchback)
-    ImageButton searchBack;
-    @BindView(R.id.searchback_container)
-    ViewGroup searchBackContainer;
-    @BindView(R.id.search_view)
-    SearchView searchView;
-    @BindView(R.id.search_background)
-    View searchBackground;
-    @BindView(android.R.id.empty)
-    ProgressBar progress;
-    @BindView(R.id.search_results)
-    RecyclerView results;
-    @BindView(R.id.container)
-    ViewGroup container;
-    @BindView(R.id.search_toolbar)
-    ViewGroup searchToolbar;
-    @BindView(R.id.results_container)
-    ViewGroup resultsContainer;
     @BindView(R.id.scrim)
-    View scrim;
+    View mScrim;
+    @BindView(R.id.search_background)
+    View mSearchBackground;
+    @BindView(R.id.search_view)
+    SearchView mSearchView;
+    @BindView(R.id.searchback)
+    ImageButton mSearchback;
+    @BindView(R.id.searchback_container)
+    FrameLayout mSearchbackContainer;
+    @BindView(R.id.search_toolbar)
+    FrameLayout mSearchToolbar;
+    @BindView(android.R.id.empty)
+    ProgressBar mEmpty;
+    @BindView(R.id.search_results)
+    RecyclerView mSearchRecyclerView;
     @BindView(R.id.results_scrim)
-    View resultsScrim;
+    View mResultsScrim;
+    @BindView(R.id.results_container)
+    FrameLayout mResultsContainer;
+    @BindView(R.id.container)
+    FrameLayout mContainer;
+
+    private SearchResultsAdapter mSearchAdapter;
+    private List<SearchResults> mResultsList;
     private TextView noResults;
     private SparseArray<Transition> transitions = new SparseArray<>();
+
+    @Inject
+    SearchPresenter mSearchPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +109,23 @@ public class SearchActivity extends Activity {
         }
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+        setupRecyclerView();
         setupSearchView();
+        DaggerSearchComponent.builder()
+                .netComponent(NSApplication.getInstance().getmNetComponent())
+                .searchModule(new SearchModule(SearchActivity.this))
+                .build().inject(SearchActivity.this);
         setExitSharedElementCallback(TransitionsUtil.createSharedElementReenterCallback(SearchActivity.this));
         setupTransitions();
         onNewIntent(getIntent());
+    }
+
+    private void setupRecyclerView() {
+        mResultsList = new ArrayList<>();
+        mSearchAdapter = new SearchResultsAdapter(SearchActivity.this, mResultsList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(SearchActivity.this);
+        mSearchRecyclerView.setLayoutManager(linearLayoutManager);
+        mSearchRecyclerView.setAdapter(mSearchAdapter);
     }
 
     @Override
@@ -108,7 +133,7 @@ public class SearchActivity extends Activity {
         if (intent.hasExtra(SearchManager.QUERY)) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             if (!TextUtils.isEmpty(query)) {
-                searchView.setQuery(query, false);
+                mSearchView.setQuery(query, false);
                 searchFor(query);
             }
         }
@@ -134,22 +159,24 @@ public class SearchActivity extends Activity {
     @Override
     public void onEnterAnimationComplete() {
         // focus the search view once the enter transition finishes
-        searchView.requestFocus();
-        ImeUtils.showIme(searchView);
+        mSearchView.requestFocus();
+        ImeUtils.showIme(mSearchView);
     }
 
     @OnClick({R.id.scrim, R.id.searchback})
     protected void dismiss() {
         // clear the background else the touch ripple moves with the translation which looks bad
-        searchBack.setBackground(null);
+        mSearchback.setBackground(null);
         finishAfterTransition();
     }
 
     void clearResults() {
-        TransitionManager.beginDelayedTransition(container, getTransition(R.transition.auto));
-        results.setVisibility(View.GONE);
-        progress.setVisibility(View.GONE);
-        resultsScrim.setVisibility(View.GONE);
+        TransitionManager.beginDelayedTransition(mContainer, getTransition(R.transition.auto));
+        mResultsList.clear();
+        mSearchAdapter.notifyDataSetChanged();
+        mSearchRecyclerView.setVisibility(View.GONE);
+        mEmpty.setVisibility(View.GONE);
+        mResultsScrim.setVisibility(View.GONE);
         setNoResultsVisibility(View.GONE);
     }
 
@@ -159,13 +186,13 @@ public class SearchActivity extends Activity {
                 noResults = (TextView) ((ViewStub)
                         findViewById(R.id.stub_no_search_results)).inflate();
                 noResults.setOnClickListener(v -> {
-                    searchView.setQuery("", false);
-                    searchView.requestFocus();
-                    ImeUtils.showIme(searchView);
+                    mSearchView.setQuery("", false);
+                    mSearchView.requestFocus();
+                    ImeUtils.showIme(mSearchView);
                 });
             }
             String message = String.format(
-                    getString(R.string.no_search_results), searchView.getQuery().toString());
+                    getString(R.string.no_search_results), mSearchView.getQuery().toString());
             SpannableStringBuilder ssb = new SpannableStringBuilder(message);
             ssb.setSpan(new StyleSpan(Typeface.ITALIC),
                     message.indexOf('“') + 1,
@@ -180,9 +207,9 @@ public class SearchActivity extends Activity {
 
     void searchFor(String query) {
         clearResults();
-        progress.setVisibility(View.VISIBLE);
-        ImeUtils.hideIme(searchView);
-        searchView.clearFocus();
+        mSearchView.clearFocus();
+        mSearchPresenter.queryForString(query);
+
     }
 
     Transition getTransition(@TransitionRes int transitionId) {
@@ -196,13 +223,17 @@ public class SearchActivity extends Activity {
 
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         // hint, inputType & ime options seem to be ignored from XML! Set in code
-        searchView.setQueryHint(getString(R.string.search_hint));
-        searchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-        searchView.setImeOptions(searchView.getImeOptions() | EditorInfo.IME_ACTION_SEARCH |
+        mSearchView.setQueryHint(getString(R.string.search_hint));
+        mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+        mSearchView.setSuggestionsAdapter(new SimpleCursorAdapter(
+                SearchActivity.this, android.R.layout.simple_list_item_1, null,
+                new String[]{SearchManager.SUGGEST_COLUMN_TEXT_1},
+                new int[]{android.R.id.text1}));
+        mSearchView.setImeOptions(mSearchView.getImeOptions() | EditorInfo.IME_ACTION_SEARCH |
                 EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_FLAG_NO_FULLSCREEN);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchFor(query);
@@ -244,4 +275,43 @@ public class SearchActivity extends Activity {
         });
     }
 
+    @Override
+    public void showResults(List<SearchResults> results) {
+        if (results != null && results.size() > 0) {
+            if (mSearchRecyclerView.getVisibility() != View.VISIBLE) {
+                TransitionManager.beginDelayedTransition(mContainer,
+                        getTransition(R.transition.search_show_results));
+                mEmpty.setVisibility(View.GONE);
+                mSearchRecyclerView.setVisibility(View.VISIBLE);
+
+                // fab.setVisibility(View.VISIBLE);
+            }
+            mResultsList.addAll(results);
+            mSearchAdapter.notifyDataSetChanged();
+        } else {
+            TransitionManager.beginDelayedTransition(
+                    mContainer, getTransition(R.transition.auto));
+            mEmpty.setVisibility(View.GONE);
+            setNoResultsVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void searchError(String errorMsg) {
+        TransitionManager.beginDelayedTransition(
+                mContainer, getTransition(R.transition.auto));
+        mEmpty.setVisibility(View.GONE);
+        setNoResultsVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showProgress() {
+        mEmpty.setVisibility(View.VISIBLE);
+        ImeUtils.hideIme(mSearchView);
+    }
+
+    @Override
+    public void hideProgress() {
+        mEmpty.setVisibility(View.GONE);
+    }
 }

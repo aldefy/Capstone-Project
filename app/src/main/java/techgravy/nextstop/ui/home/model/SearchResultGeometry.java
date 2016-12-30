@@ -1,12 +1,28 @@
 package techgravy.nextstop.ui.home.model;
 
-import auto.json.AutoJson;
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 /**
- * Created by aditlal on 26/12/16.
+ * Created by aditlal on 27/12/16.
  */
-@AutoJson
-public abstract class SearchResultGeometry {
-    @AutoJson.Field(name = "location")
-    public abstract PlaceLatLng location();
+@JsonObject
+public class SearchResultGeometry {
+    @JsonField(name = "location")
+    private PlaceLatLng location;
+
+    public PlaceLatLng getLocation() {
+        return location;
+    }
+
+    public void setLocation(PlaceLatLng location) {
+        this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchResultGeometry{" +
+                "location=" + location +
+                '}';
+    }
 }

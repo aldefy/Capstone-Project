@@ -12,7 +12,8 @@ import techgravy.nextstop.ui.home.model.PlaceLatLng;
  * Created by aditlal on 25/12/16.
  */
 
-public class PlacesLatLngConventer implements TypeConverter<PlaceLatLng> {
+public class PlacesLatLngConverter implements TypeConverter<PlaceLatLng> {
+
     double lat = 0, lng = 0;
 
     @Override

@@ -13,10 +13,10 @@
         android:id="@+id/placeImageView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_180dp"
-        android:clickable="false"
         android:background="?attr/colorPrimary"
-        android:transitionName="toolbarImage"
+        android:clickable="false"
         android:scaleType="center"
+        android:transitionName="toolbarImage"
         tools:src="@drawable/landing_3"/>
 
     <View
@@ -28,11 +28,14 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/placeNameTextView"
-        android:layout_width="wrap_content"
+        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_margin="@dimen/spacing_normal"
         android:clickable="false"
+        android:gravity="center"
+        android:maxLines="2"
         android:transitionName="toolbarTitle"
-        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         tools:text="@string/sample"/>
 </RelativeLayout>
