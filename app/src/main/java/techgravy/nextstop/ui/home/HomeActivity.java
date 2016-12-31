@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,18 +26,16 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.view.WindowInsets;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
-import com.github.javiersantos.materialstyleddialogs.enums.Duration;
 import com.jakewharton.rxbinding.view.RxView;
+import com.mancj.slideup.SlideUp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +51,11 @@ import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.ui.search.SearchActivity;
 import techgravy.nextstop.ui.transitions.ReflowText;
 import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
-import techgravy.nextstop.utils.ViewUtils;
 import timber.log.Timber;
-
-import static techgravy.nextstop.R.id.fab;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -66,8 +63,8 @@ public class HomeActivity extends AppCompatActivity
 
     private static final int RC_SEARCH = 0;
     private static final String TAG = "HOME";
-    @BindView(R.id.status_bar_background)
-    View mStatusBarBackground;
+    private static final int REQUEST_PLACE = 523; //Request code , random
+    @Nullable
     @BindView(android.R.id.empty)
     ProgressBar mLoading;
     @Nullable
@@ -81,9 +78,22 @@ public class HomeActivity extends AppCompatActivity
     Toolbar mToolbar;
     @BindView(R.id.placesRecyclerView)
     RecyclerView mPlacesRecyclerView;
-    @BindView(fab)
+    @BindView(R.id.appBar)
+    AppBarLayout mAppBar;
+    @BindView(R.id.dimLayout)
+    FrameLayout mDimLayout;
+    @BindView(R.id.textView)
+    TextView mTextView;
+    @BindView(R.id.imageView)
+    ImageView mImageView;
+    @BindView(R.id.slideView)
+    LinearLayout mSlideView;
+    @BindView(R.id.content_slide_up_view)
+    RelativeLayout mContentSlideUpView;
+    @BindView(R.id.content_home)
+    RelativeLayout mContentHome;
+    @BindView(R.id.fab)
     FloatingActionButton mFab;
-
     @Inject
     HomePresenter mHomePresenter;
     private HomeAdapter mHomeAdapter;
@@ -93,6 +103,47 @@ public class HomeActivity extends AppCompatActivity
     private CompositeSubscription mCompositeSubscription;
     private boolean connected = true;
     private boolean monitoringConnectivity = false;
+    private SlideUp mSlideUp;
+    private RecyclerView.OnScrollListener toolbarElevation = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            // we want the grid to scroll over the top of the toolbar but for the toolbar items
+            // to be clickable when visible. To achieve this we play games with elevation. The
+            // toolbar is laid out in front of the grid but when we scroll, we lower it's elevation
+            // to allow the content to pass in front (and reset when scrolled to top of the grid)
+            if (newState == RecyclerView.SCROLL_STATE_IDLE
+                    && mLinearLayoutManager.findFirstVisibleItemPosition() == 0
+                    && mLinearLayoutManager.findViewByPosition(0).getTop() == recyclerView.getPaddingTop()
+                    && mToolbar.getTranslationZ() != 0) {
+                // at top, reset elevation
+                mToolbar.setTranslationZ(0f);
+            } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING
+                    && mToolbar.getTranslationZ() != -1f) {
+                // grid scrolled, lower toolbar to allow content to pass in front
+                mToolbar.setTranslationZ(-1f);
+            }
+        }
+    };
+    private ConnectivityManager.NetworkCallback connectivityCallback
+            = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            connected = true;
+            if (mHomeAdapter.getItemCount() != 0) return;
+            runOnUiThread(() -> {
+                TransitionManager.beginDelayedTransition(mDrawerLayout);
+                noConnection.setVisibility(View.GONE);
+                mLoading.setVisibility(View.VISIBLE);
+                showFab();
+                //mHomePresenter.fetchListOfPlaces();
+            });
+        }
+
+        @Override
+        public void onLost(Network network) {
+            connected = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +151,10 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
+        Timber.tag(TAG);
+        DaggerHomeComponent.builder()
+                .homeModule(new HomeModule(HomeActivity.this))
+                .build().inject(HomeActivity.this);
         setupViews();
     }
 
@@ -108,23 +163,27 @@ public class HomeActivity extends AppCompatActivity
         showFab();
 
         mCompositeSubscription = new CompositeSubscription();
-        Timber.tag(TAG);
-        DaggerHomeComponent.builder()
-                .homeModule(new HomeModule(HomeActivity.this))
-                .build().inject(HomeActivity.this);
-        Subscription fabClickSub = RxView.clicks(mFab).subscribe(aVoid -> {
 
-            MaterialStyledDialog dialog = new MaterialStyledDialog(HomeActivity.this)
-                    .setTitle(getString(R.string.sort))
-                    .setHeaderColor(R.color.accent_70)
-                    .setScrollable(true)
-                    .withDialogAnimation(true, Duration.FAST)
-                    .setCancelable(true)
-                    .setNegative("Sort", (dialog1, which) -> dialog1.dismiss())
-                    .setPositive("Cancel", (dialog1, which) -> dialog1.dismiss())
-                    .setDescription("Sort according to :")
-                    .build();
-            dialog.show();
+        mSlideUp = new SlideUp(mSlideView);
+        mSlideUp.hideImmediately();
+        Subscription fabClickSub = RxView.clicks(mFab).subscribe(aVoid -> {
+            mSlideView.bringToFront();
+            mContentHome.invalidate();
+            mSlideUp.animateIn();
+            mFab.hide();
+        });
+        mSlideUp.setSlideListener(new SlideUp.SlideListener() {
+            @Override
+            public void onSlideDown(float percent) {
+                mDimLayout.setAlpha(1 - (percent / 100));
+            }
+
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                if (visibility == View.GONE) {
+                    mFab.show();
+                }
+            }
         });
         mCompositeSubscription.add(fabClickSub);
         initDataFetch();
@@ -157,82 +216,17 @@ public class HomeActivity extends AppCompatActivity
         ((TextView) headerView.findViewById(R.id.nameTextView)).setText(sharedPrefManager.getUserFullName());
         Glide.with(HomeActivity.this).load(sharedPrefManager.getAvatarUrl()).into((CircleImageView) headerView.findViewById(R.id.avatarImageView));
         mNavView.setNavigationItemSelectedListener(this);
-        // drawer layout treats fitsSystemWindows specially so we have to handle insets ourselves
-        mDrawerLayout.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-            @Override
-            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-                // inset the toolbar down by the status bar height
-                ViewGroup.MarginLayoutParams lpToolbar = (ViewGroup.MarginLayoutParams) mToolbar
-                        .getLayoutParams();
-                lpToolbar.topMargin += insets.getSystemWindowInsetTop();
-                lpToolbar.leftMargin += insets.getSystemWindowInsetLeft();
-                lpToolbar.rightMargin += insets.getSystemWindowInsetRight();
-                mToolbar.setLayoutParams(lpToolbar);
 
-                // inset the grid top by statusbar+toolbar & the bottom by the navbar (don't clip)
-                mPlacesRecyclerView.setPadding(
-                        mPlacesRecyclerView.getPaddingLeft() + insets.getSystemWindowInsetLeft(), // landscape
-                        insets.getSystemWindowInsetTop()
-                                + ViewUtils.getActionBarSize(HomeActivity.this),
-                        mPlacesRecyclerView.getPaddingRight() + insets.getSystemWindowInsetRight(), // landscape
-                        mPlacesRecyclerView.getPaddingBottom() + insets.getSystemWindowInsetBottom());
-
-                // inset the fab for the navbar
-                ViewGroup.MarginLayoutParams lpFab = (ViewGroup.MarginLayoutParams) mFab
-                        .getLayoutParams();
-                lpFab.bottomMargin += insets.getSystemWindowInsetBottom(); // portrait
-                lpFab.rightMargin += insets.getSystemWindowInsetRight(); // landscape
-                mFab.setLayoutParams(lpFab);
-
-
-                // we place a background behind the status bar to combine with it's semi-transparent
-                // color to get the desired appearance.  Set it's height to the status bar height
-                View statusBarBackground = findViewById(R.id.status_bar_background);
-                FrameLayout.LayoutParams lpStatus = (FrameLayout.LayoutParams)
-                        statusBarBackground.getLayoutParams();
-                lpStatus.height = insets.getSystemWindowInsetTop();
-                statusBarBackground.setLayoutParams(lpStatus);
-
-
-                // clear this listener so insets aren't re-applied
-                mDrawerLayout.setOnApplyWindowInsetsListener(null);
-
-                return insets.consumeSystemWindowInsets();
-            }
-        });
     }
 
     void checkEmptyState() {
         if (mHomeAdapter.getItemCount() == 0) {
             // if grid is empty check whether we're loading or if no filters are selected
             mLoading.setVisibility(View.GONE);
-            mToolbar.setTranslationZ(0f);
         } else {
             mLoading.setVisibility(View.GONE);
         }
     }
-
-    private RecyclerView.OnScrollListener toolbarElevation = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            // we want the grid to scroll over the top of the toolbar but for the toolbar items
-            // to be clickable when visible. To achieve this we play games with elevation. The
-            // toolbar is laid out in front of the grid but when we scroll, we lower it's elevation
-            // to allow the content to pass in front (and reset when scrolled to top of the grid)
-            if (newState == RecyclerView.SCROLL_STATE_IDLE
-                    && mLinearLayoutManager.findFirstVisibleItemPosition() == 0
-                    && mLinearLayoutManager.findViewByPosition(0).getTop() == recyclerView.getPaddingTop()
-                    && mToolbar.getTranslationZ() != 0) {
-                // at top, reset elevation
-                mToolbar.setTranslationZ(0f);
-            } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING
-                    && mToolbar.getTranslationZ() != -1f) {
-                // grid scrolled, lower toolbar to allow content to pass in front
-                mToolbar.setTranslationZ(-1f);
-            }
-        }
-    };
-
 
     private void showFab() {
         mFab.setAlpha(0f);
@@ -254,12 +248,12 @@ public class HomeActivity extends AppCompatActivity
         mPlacesList = new ArrayList<>();
         mLinearLayoutManager = new LinearLayoutManager(HomeActivity.this);
         mPlacesRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mPlacesRecyclerView.addOnScrollListener(toolbarElevation);
+        //    mPlacesRecyclerView.addOnScrollListener(toolbarElevation);
         mPlacesRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getApplicationContext()));
         mHomeAdapter = new HomeAdapter(HomeActivity.this, mPlacesList);
         mPlacesRecyclerView.setAdapter(mHomeAdapter);
 
-        //Added to trigger a Scoll Behaviour similar to ScrollAwareFABBehavior
+      /*  //Added to trigger a Scoll Behaviour similar to ScrollAwareFABBehavior
         mPlacesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -276,7 +270,7 @@ public class HomeActivity extends AppCompatActivity
 
                 super.onScrollStateChanged(recyclerView, newState);
             }
-        });
+        });*/
     }
 
     @Override
@@ -365,10 +359,8 @@ public class HomeActivity extends AppCompatActivity
         final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         connected = activeNetworkInfo != null && activeNetworkInfo.isConnected();
         if (!connected) {
-            mLoading.setVisibility(View.GONE);
-            if (noConnection == null) {
-                final ViewStub stub = (ViewStub) findViewById(R.id.stub_no_connection);
-                noConnection = (ImageView) stub.inflate();
+            if (mLoading != null) {
+                mLoading.setVisibility(View.GONE);
             }
             final AnimatedVectorDrawable avd =
                     (AnimatedVectorDrawable) getDrawable(R.drawable.avd_no_connection);
@@ -383,29 +375,11 @@ public class HomeActivity extends AppCompatActivity
                             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build(),
                     connectivityCallback);
             monitoringConnectivity = true;
+        } else {
+            noConnection.setVisibility(View.GONE);
+
         }
     }
-
-    private ConnectivityManager.NetworkCallback connectivityCallback
-            = new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-            connected = true;
-            if (mHomeAdapter.getItemCount() != 0) return;
-            runOnUiThread(() -> {
-                TransitionManager.beginDelayedTransition(mDrawerLayout);
-                noConnection.setVisibility(View.GONE);
-                mLoading.setVisibility(View.VISIBLE);
-                showFab();
-                //mHomePresenter.fetchListOfPlaces();
-            });
-        }
-
-        @Override
-        public void onLost(Network network) {
-            connected = false;
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -414,7 +388,7 @@ public class HomeActivity extends AppCompatActivity
 
         // When reentering, if the shared element is no longer on screen (e.g. after an
         // orientation change) then scroll it into view.
-        final int hashcode = data.getIntExtra(DetailsCityActivity.RESULT_EXTRA_PLACES_ID,-1);
+        final int hashcode = data.getIntExtra(DetailsCityActivity.RESULT_EXTRA_PLACES_ID, -1);
         if (hashcode != -1                                             // returning from a shot
                 && mHomeAdapter.getItemCount() > 0) {                           // adapter populated {    // view not attached
             final int position = mHomeAdapter.getItemPosition(hashcode);
@@ -435,8 +409,6 @@ public class HomeActivity extends AppCompatActivity
 
         }
     }
-
-    private static final int REQUEST_PLACE = 523; //Request code , random
 
     @Override
     public void itemClicked(Places places, View imageView, View textView) {

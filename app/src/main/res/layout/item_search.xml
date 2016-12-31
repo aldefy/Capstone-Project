@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_180dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:foreground="@drawable/view_ripple"
     android:orientation="vertical">
@@ -12,18 +12,13 @@
     <ImageView
         android:id="@+id/placeImageView"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_180dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
         android:clickable="false"
         android:scaleType="center"
         android:transitionName="toolbarImage"
         tools:src="@drawable/landing_3"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_180dp"
-        android:alpha="0.35"
-        android:background="@color/primary_dark"
-        android:clickable="false"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/placeNameTextView"

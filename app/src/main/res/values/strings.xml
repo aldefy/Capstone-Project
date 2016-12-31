@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">Next Stop</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <!--Landing page-->
+    <string name="fb_start">Login with Facebook</string>
+    <!--Navigation Drawer and other navigation flow strings-->
+    <string name="userAvatar">userAvatar</string>
+
+    <!--Landing page -->
+    <string name="desc_1">Find incredible\nplaces you\nwill</string>
+    <string name="sub_desc_1">NextStop helps you to find exciting things to do, no matter where you
+        go.
+    </string>
+    <string name="desc_1_append_1">love</string>
+    <string name="desc_2">Your\n</string>
+    <string name="desc_2_append_1">favorite\n</string>
+    <string name="desc_2_append_2">places</string>
+    <string name="sub_desc_2">Explore the world searching\nby location, interests and\nmore on the
+        go.
+    </string>
+    <string name="desc_3">The</string>
+    <string name="desc_3_append_1">world\n</string>
+    <string name="desc_3_append_2">in your\npocket</string>
+    <string name="sub_desc_3">Save your trip for easy\naccess later</string>
+    <string name="desc_on_boarding">Discover\n</string>
+    <string name="desc_on_boarding_append">interesting things</string>
+    <string name="sub_desc_on_boarding">Let us help you to plan your\nnext trip to amazing places.
+    </string>
+    <string name="signup">Signup</string>
+    <string name="login">login</string>
+    <string name="skip"><![CDATA[Skip >>]]></string>
+    <string name="hint_your_email">Your email</string>
+    <string name="hint_password">Password</string>
+    <string name="pwd_toggle">Toggle Password visibility</string>
+    <string name="persona_heading">What types of places do you prefer to visit ?</string>
+    <string name="choice_desc">You can choose one or more</string>
+    <string name="next">NEXT</string>
+    <string name="sample">Sample</string>
+    <string name="sort">Choose a sort</string>
+    <string name="search">Search</string>
+    <string name="no_search_results">No results for\n“%1$s</string>
+    <string name="search_hint">Search for places , things to do</string>
+
+    <!-- app shortcuts -->
+    <string name="shortcut_search_short_label">@string/search</string>
+    <string name="shortcut_search_long_label">@string/search</string>
+    <string name="shortcut_search_disabled">Search not available</string>
+
+
+    <!-- Log Glide -->
+    <string name="log_error">Glide url = %1$s : %2$s</string>
+    <string name="slide_it_down">Slide it down</string>
+
+</resources>
+

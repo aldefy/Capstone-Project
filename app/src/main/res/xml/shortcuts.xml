@@ -25,7 +25,7 @@
         android:shortcutDisabledMessage="@string/shortcut_search_disabled">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="techgravy.nextstop.ui.home.SearchActivity"
+            android:targetClass="techgravy.nextstop.ui.search.SearchActivity"
             android:targetPackage="techgravy.nextstop" />
     </shortcut>
 

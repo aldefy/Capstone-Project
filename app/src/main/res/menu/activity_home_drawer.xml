@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/upperDeck" android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_home"
+                android:title="@string/home"/>
+        <item
+                android:id="@+id/nav_connect"
+                android:title="@string/connect"/>
+        <item
+                android:id="@+id/nav_profile"
+                android:title="@string/profile"/>
+
+    </group>
+
+    <group android:id="@+id/lowerDeck" android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_settings"
+                android:title="@string/settings"/>
+        <item
+                android:id="@+id/nav_help"
+                android:title="@string/help"/>
+
+    </group>
+</menu>
+

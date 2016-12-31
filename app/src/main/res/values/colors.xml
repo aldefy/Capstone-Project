@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#1976d2</color>
+    <color name="primary_dark">#0f467e</color>
+    <color name="primary_light">#75ace4</color>
+    <color name="accent">#FF5252</color>
+    <color name="accent_70">#B3FF5252</color>
+    <color name="accent_30">#4DFF5252</color>
+    <color name="primary_dark_35">#590f467e</color>
+    <color name="grey200">#cecece</color>
+    <color name="scrim">#99323232</color>
+    <color name="background_super_dark">#ff292929</color>
+    <color name="dark_tangerine">#FFF9A825</color>
+    <color name="dark_tangerine_70">#B3F9A825</color>
+    <color name="sandstorm">#FFF9D641</color>
+    <color name="coral">#FFF87D57</color>
+    <color name="yellow_green">#FF85DF20</color>
+    <color name="medium_spring_bud">#B8E986</color>
+    <color name="spring_bud">#FFB8E986</color>
+    <color name="primary_text">#FFFFFFFF</color>
+    <color name="secondary_text">#B3FFFFFF</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_84">#D6FFFFFF</color>
+    <color name="white_30">#4DFFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="black_60">#99000000</color>
+    <color name="black_87">#DE000000</color>
+    <color name="black_27">#45000000</color>
+    <color name="fb_normal">#3b5999</color>
+    <color name="fb_pressed">#293e6b</color>
+    <color name="transparent">#000f467e</color>
+    <color name="background_dark">#ff333333</color>
+    <color name="text_secondary_dark">#8a000000</color>
+    <color name="light_grey">#fff5f5f5</color> <!-- 54% -->
+
+    <color name="fab_color_pressed">@color/accent_70</color>
+    <color name="fab_color_shadow">#44000000</color>
+
+
+    <color name="immersive_bars">#99000000</color>
+    <color name="light_immersive_bars">@color/immersive_bars</color>
+    <color name="status_bar_back">#ff676767</color>
+    <color name="dimBg">#bf000000
+    </color> <!-- this is blended with immersive_bars to produce the desired status bar color i.e. background_super_dark -->
+
+
+</resources>
