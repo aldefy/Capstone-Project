@@ -1,41 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/content_home"
+    android:id="@+id/content_slide_up_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="60dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <ProgressBar
-        android:id="@android:id/empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:indeterminateTint="?android:colorAccent"
-        android:indeterminateTintMode="src_in"
-        android:visibility="gone"/>
 
-    <include layout="@layout/content_slide_up_view"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/no_connection"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:paddingBottom="?android:actionBarSize"
-        android:src="@drawable/no_connection"
-        android:visibility="gone"/>
+        <ProgressBar
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:indeterminateTint="?android:colorAccent"
+            android:indeterminateTintMode="src_in"
+            android:visibility="gone"/>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/placesRecyclerView"
+        <ImageView
+            android:id="@+id/no_connection"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingBottom="?android:actionBarSize"
+            android:src="@drawable/no_connection"
+            android:visibility="gone"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/placesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_home"/>
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/dimLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_home"/>
+        android:alpha="0"
+        android:background="@color/dimBg"
+        android:fitsSystemWindows="true"/>
+    <LinearLayout
+        android:id="@+id/slideView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/accent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="@string/slide_it_down"
+            android:textColor="@color/grey200"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down_white_24dp"/>
+    </LinearLayout>
+
 </RelativeLayout>

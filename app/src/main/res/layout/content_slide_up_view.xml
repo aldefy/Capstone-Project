@@ -22,14 +22,14 @@
             android:layout_marginTop="16dp"
             android:gravity="center_horizontal"
             android:text="@string/slide_it_down"
-            android:textColor="@color/grey200"/>
+            android:textColor="@color/white"/>
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"/>
+            app:srcCompat="@drawable/ic_keyboard_arrow_down_white_24dp"/>
 
 
     </LinearLayout>

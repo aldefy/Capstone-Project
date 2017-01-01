@@ -1,5 +1,6 @@
 package techgravy.nextstop.ui.home;
 
+import android.animation.Animator;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -13,19 +14,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.TransitionManager;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +30,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.jakewharton.rxbinding.view.RxView;
 import com.mancj.slideup.SlideUp;
 
@@ -44,7 +40,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import techgravy.nextstop.R;
@@ -57,9 +52,11 @@ import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
 import timber.log.Timber;
 
+import static techgravy.nextstop.R.id.imageView;
+
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomeContract.View, HomeAdapter.PlaceAdapterClickInterface {
+        implements HomeContract.View, HomeAdapter.PlaceAdapterClickInterface {
 
     private static final int RC_SEARCH = 0;
     private static final String TAG = "HOME";
@@ -70,12 +67,9 @@ public class HomeActivity extends AppCompatActivity
     @Nullable
     @BindView(R.id.no_connection)
     ImageView noConnection;
-    @BindView(R.id.nav_view)
-    NavigationView mNavView;
-    @BindView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @Nullable
     @BindView(R.id.placesRecyclerView)
     RecyclerView mPlacesRecyclerView;
     @BindView(R.id.appBar)
@@ -84,14 +78,13 @@ public class HomeActivity extends AppCompatActivity
     FrameLayout mDimLayout;
     @BindView(R.id.textView)
     TextView mTextView;
-    @BindView(R.id.imageView)
+    @BindView(imageView)
     ImageView mImageView;
     @BindView(R.id.slideView)
     LinearLayout mSlideView;
     @BindView(R.id.content_slide_up_view)
     RelativeLayout mContentSlideUpView;
-    @BindView(R.id.content_home)
-    RelativeLayout mContentHome;
+    @Nullable
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @Inject
@@ -104,6 +97,8 @@ public class HomeActivity extends AppCompatActivity
     private boolean connected = true;
     private boolean monitoringConnectivity = false;
     private SlideUp mSlideUp;
+    private float pixelDensity;
+
     private RecyclerView.OnScrollListener toolbarElevation = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -131,7 +126,6 @@ public class HomeActivity extends AppCompatActivity
             connected = true;
             if (mHomeAdapter.getItemCount() != 0) return;
             runOnUiThread(() -> {
-                TransitionManager.beginDelayedTransition(mDrawerLayout);
                 noConnection.setVisibility(View.GONE);
                 mLoading.setVisibility(View.VISIBLE);
                 showFab();
@@ -151,6 +145,7 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
+        pixelDensity = getResources().getDisplayMetrics().density;
         Timber.tag(TAG);
         DaggerHomeComponent.builder()
                 .homeModule(new HomeModule(HomeActivity.this))
@@ -158,17 +153,21 @@ public class HomeActivity extends AppCompatActivity
         setupViews();
     }
 
+    int x = 0, y = 0, hypotenuse;
+
     private void setupViews() {
         setupToolbar();
         showFab();
 
         mCompositeSubscription = new CompositeSubscription();
+        x = mSlideView.getRight();
+        y = mSlideView.getBottom();
+        x -= ((28 * pixelDensity) + (16 * pixelDensity));
+        hypotenuse = (int) Math.hypot(mSlideView.getWidth(), mSlideView.getHeight());
 
         mSlideUp = new SlideUp(mSlideView);
         mSlideUp.hideImmediately();
         Subscription fabClickSub = RxView.clicks(mFab).subscribe(aVoid -> {
-            mSlideView.bringToFront();
-            mContentHome.invalidate();
             mSlideUp.animateIn();
             mFab.hide();
         });
@@ -209,13 +208,6 @@ public class HomeActivity extends AppCompatActivity
                     .setInterpolator(AnimUtils.getLinearOutSlowInInterpolator(this));
         }
 
-        View headerView = mNavView.getHeaderView(0);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        ((TextView) headerView.findViewById(R.id.nameTextView)).setText(sharedPrefManager.getUserFullName());
-        Glide.with(HomeActivity.this).load(sharedPrefManager.getAvatarUrl()).into((CircleImageView) headerView.findViewById(R.id.avatarImageView));
-        mNavView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -275,12 +267,15 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        if (mSlideUp != null) {
+            if (mSlideUp.isVisible()) {
+                mSlideUp.hideImmediately();
+                Animator anim = ViewAnimationUtils.createCircularReveal(mSlideView, x, y, hypotenuse, 0);
+                anim.setDuration(400);
+                anim.start();
+            } else super.onBackPressed();
+        } else super.onBackPressed();
+
     }
 
     @Override
@@ -307,16 +302,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     @Override
     public void attachData(List<Places> placesList) {
@@ -376,7 +361,9 @@ public class HomeActivity extends AppCompatActivity
                     connectivityCallback);
             monitoringConnectivity = true;
         } else {
-            noConnection.setVisibility(View.GONE);
+            if (noConnection != null) {
+                noConnection.setVisibility(View.GONE);
+            }
 
         }
     }
