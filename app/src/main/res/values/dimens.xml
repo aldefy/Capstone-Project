@@ -50,5 +50,6 @@
     <dimen name="btn_fab_size">56dp</dimen>
     <dimen name="btn_fab_margins">16dp</dimen>
     <dimen name="default_elevation">8dp</dimen>
+    <dimen name="dimen_360dp">360dp</dimen>
 
 </resources>

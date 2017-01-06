@@ -15,8 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.ArrayList;
@@ -29,6 +33,7 @@ import rx.subscriptions.CompositeSubscription;
 import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.ui.home.HomeActivity;
+import timber.log.Timber;
 
 /**
  * Created by aditlal on 16/12/16 - 16.
@@ -104,16 +109,14 @@ public class BuildPersonaActivity extends AppCompatActivity implements PersonaGr
     }
 
     private void updateUserInDataBase() {
-        startActivity(new Intent(BuildPersonaActivity.this, HomeActivity.class));
-        finish();
-       /* Query query = database.child("users").orderByChild(prefManager.getUUID());
+        Query query = database.child("users").orderByChild(prefManager.getUUID());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Timber.tag(TAG).d(dataSnapshot.toString());
-            //    User user = dataSnapshot.getValue(User.class);
+                //    User user = dataSnapshot.getValue(User.class);
                 dataSnapshot.getRef().child(prefManager.getUUID()).child("personaTags").setValue(userSelectionList);
-            //    database.child("users").child(prefManager.getUUID()).setValue(user);
+                //    database.child("users").child(prefManager.getUUID()).setValue(user);
                 startActivity(new Intent(BuildPersonaActivity.this, HomeActivity.class));
                 finish();
             }
@@ -122,7 +125,7 @@ public class BuildPersonaActivity extends AppCompatActivity implements PersonaGr
             public void onCancelled(DatabaseError databaseError) {
                 Timber.tag(TAG).e(databaseError.getMessage());
             }
-        });*/
+        });
     }
 
     @Override

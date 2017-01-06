@@ -52,4 +52,13 @@ public class User {
     public void setPersonaTagsList(List<PersonaTags> personaTagsList) {
         this.personaTagsList = personaTagsList;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "photoUrl='" + photoUrl + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", personaTagsList=" + personaTagsList +
+                '}';
+    }
 }

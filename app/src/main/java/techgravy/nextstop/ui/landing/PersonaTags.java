@@ -1,12 +1,19 @@
 package techgravy.nextstop.ui.landing;
 
+import com.google.firebase.database.PropertyName;
+
 /**
  * Created by aditlal on 16/12/16 - 16.
  */
 public class PersonaTags {
+    @PropertyName("actionName")
     String actionName;
-
+    @PropertyName("checked")
     boolean checked;
+
+    public PersonaTags() {
+        // Default constructor required for calls to DataSnapshot.getValue(PersonaTags.class)
+    }
 
     public PersonaTags(String name) {
         this.actionName = name;

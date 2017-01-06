@@ -23,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
         </android.support.design.widget.AppBarLayout>
@@ -42,7 +43,7 @@
             app:elevation="@dimen/default_elevation"
             app:layout_anchorGravity="bottom|right|end"
             app:pressedTranslationZ="@dimen/z_fab_pressed"
-            app:srcCompat="@drawable/ic_sort"/>
+            app:srcCompat="@drawable/ic_filter"/>
 
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

@@ -53,6 +53,9 @@
     <!-- Log Glide -->
     <string name="log_error">Glide url = %1$s : %2$s</string>
     <string name="slide_it_down">Slide it down</string>
+    <string name="filters">Filters</string>
+    <string name="apply">APPLY</string>
+    <string name="about">About</string>
 
 </resources>
 

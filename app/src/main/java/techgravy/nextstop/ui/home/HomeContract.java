@@ -1,8 +1,10 @@
 package techgravy.nextstop.ui.home;
 
+import java.util.HashMap;
 import java.util.List;
 
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.ui.landing.PersonaTags;
 
 /**
  * Created by aditlal on 24/12/16.
@@ -11,7 +13,11 @@ import techgravy.nextstop.ui.home.model.Places;
 public interface HomeContract {
 
     interface View {
-        void attachData(List<Places> placesList);
+        void attachUserPlaces(List<Places> placesList);
+
+        void attachPlaces(List<Places> placesList);
+
+        void filterPersonaTags(List<PersonaTags> personaTags);
 
         void showProgress();
 
@@ -21,7 +27,10 @@ public interface HomeContract {
     }
 
     interface Presenter {
-        void fetchListOfPlaces();
+        void filterPlaces(HashMap<String, Boolean> personaTagsList);
 
+        void fetchUserPlaces();
+
+        void fetchUserPersonaTags();
     }
 }

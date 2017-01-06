@@ -97,4 +97,9 @@ public abstract class Places implements Parcelable {
     public abstract String nightlife();
 
 
+    public String printNames(){
+        return place();
+    }
+
+
 }

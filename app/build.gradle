@@ -138,6 +138,8 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxVersion"
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxVersion"
     compile 'com.binaryfork:spanny:1.0.4'
+    compile 'com.github.medyo:android-about-page:1.1.1'
+
 
     /*
         Annotation Processor libs - Dagger ,Auto value, etc

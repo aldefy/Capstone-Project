@@ -1,6 +1,7 @@
 package techgravy.nextstop.ui.home;
 
 import dagger.Component;
+import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.utils.CustomScope;
 
 /**
@@ -10,4 +11,6 @@ import techgravy.nextstop.utils.CustomScope;
 @Component(modules = HomeModule.class)
 public interface HomeComponent {
     void inject(HomeActivity activity);
+
+    SharedPrefManager prefManager();
 }
