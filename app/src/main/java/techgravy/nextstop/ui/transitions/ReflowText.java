@@ -66,9 +66,9 @@ import techgravy.nextstop.R;
 public class ReflowText extends Transition {
 
     private static final String EXTRA_REFLOW_DATA = "EXTRA_REFLOW_DATA";
-    private static final String PROPNAME_DATA = "plaid:reflowtext:data";
-    private static final String PROPNAME_TEXT_SIZE = "plaid:reflowtext:textsize";
-    private static final String PROPNAME_BOUNDS = "plaid:reflowtext:bounds";
+    private static final String PROPNAME_DATA = "nextstop:reflowtext:data";
+    private static final String PROPNAME_TEXT_SIZE = "nextstop:reflowtext:textsize";
+    private static final String PROPNAME_BOUNDS = "nextstop:reflowtext:bounds";
     private static final String[] PROPERTIES = {PROPNAME_TEXT_SIZE, PROPNAME_BOUNDS};
     private static final int TRANSPARENT = 0;
     private static final int OPAQUE = 255;

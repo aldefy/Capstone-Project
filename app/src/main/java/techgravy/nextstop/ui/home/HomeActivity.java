@@ -53,7 +53,6 @@ import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.ui.landing.PersonaTags;
 import techgravy.nextstop.ui.search.SearchActivity;
-import techgravy.nextstop.ui.transitions.ReflowText;
 import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
@@ -333,7 +332,7 @@ public class HomeActivity extends AppCompatActivity
                 startActivityForResult(new Intent(this, SearchActivity.class), RC_SEARCH, options);
                 return true;
             case R.id.menu_about:
-                startActivity(new Intent(this,AboutActivity.class));
+                startActivity(new Intent(this, AboutActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -466,9 +465,6 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = new Intent();
         intent.setClass(HomeActivity.this, DetailsCityActivity.class);
         intent.putExtra(DetailsCityActivity.EXTRA_PLACE, places);
-        ReflowText.addExtras(
-                intent,
-                new ReflowText.ReflowableTextView((TextView) textView));
         ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, Pair.create(imageView, imageView.getTransitionName()),
                         Pair.create(textView, textView.getTransitionName()));

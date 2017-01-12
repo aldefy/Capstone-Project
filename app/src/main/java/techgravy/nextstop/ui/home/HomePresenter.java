@@ -68,7 +68,7 @@ class HomePresenter implements HomeContract.Presenter {
                                 resultMap.put(places.place(), places);
                             break;
                         case "Entertainment":
-                            if (places.enterainment().equalsIgnoreCase("true"))
+                            if (places.entertainment().equalsIgnoreCase("true"))
                                 resultMap.put(places.place(), places);
                             break;
                         case "Shopping":
@@ -174,12 +174,18 @@ class HomePresenter implements HomeContract.Presenter {
         });
     }
 
+    private String toTitle (String s) {
+        String s1 = s.substring(0,1).toUpperCase();
+        String sTitle = s1 + s.substring(1);
+        return sTitle;
+    }
+
     private void computeUserSelectionPlaces(List<Places> placesList) {
         HashMap<String, Places> resultMap = new HashMap<>();
         if (userSelectionList.size() > 0) {
             for (PersonaTags personaTags : userSelectionList)
                 if (personaTags.isChecked())
-                    personaList.add(personaTags.getActionName());
+                    personaList.add(toTitle(personaTags.getActionName()));
             Iterator<Places> iterator = placesList.iterator();
             while (iterator.hasNext()) {
                 Places places = iterator.next();
@@ -190,7 +196,7 @@ class HomePresenter implements HomeContract.Presenter {
                                 resultMap.put(places.place(), places);
                             break;
                         case "Entertainment":
-                            if (places.enterainment().equalsIgnoreCase("true"))
+                            if (places.entertainment().equalsIgnoreCase("true"))
                                 resultMap.put(places.place(), places);
                             break;
                         case "Shopping":

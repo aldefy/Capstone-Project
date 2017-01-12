@@ -48,7 +48,7 @@ public abstract class Places implements Parcelable {
     public abstract String cityscape();
 
     @AutoJson.Field
-    public abstract String enterainment();
+    public abstract String entertainment();
 
     @AutoJson.Field
     public abstract String sun();

@@ -18,7 +18,7 @@
     <dimen name="padding_normal">16dp</dimen>
     <dimen name="padding_large">24dp</dimen>
     <dimen name="keyline_1">72dp</dimen>
-    <dimen name="divider_height">1px</dimen>
+    <dimen name="divider_height">1dp</dimen>
     <dimen name="dialog_corners">2dp</dimen>
     <dimen name="padding_room_for_fab">88dp</dimen> <!-- padding_normal + fab_size + padding_normal -->
     <dimen name="fab_plus_single_padding">72dp</dimen> <!-- fab_size + padding_normal -->
@@ -51,5 +51,10 @@
     <dimen name="btn_fab_margins">16dp</dimen>
     <dimen name="default_elevation">8dp</dimen>
     <dimen name="dimen_360dp">360dp</dimen>
+
+
+    <!--Weather-->
+    <dimen name="weather_icon">40dp</dimen>
+    <dimen name="forecast_text_width">70dp</dimen>
 
 </resources>

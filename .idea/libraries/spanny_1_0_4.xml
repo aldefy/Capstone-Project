@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="spanny-1.0.4">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/3a12ccba09a0f41e80783b9f1e401edd8119ff6a/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/3a12ccba09a0f41e80783b9f1e401edd8119ff6a/output/res" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.binaryfork/spanny/1.0.4/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.binaryfork/spanny/1.0.4/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -1,6 +1,9 @@
 package techgravy.nextstop.ui.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +13,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.util.List;
 
@@ -45,8 +50,25 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Places places = getItemAtPosition(position);
-        Glide.with(mContext).load(places.photos().get(0)).diskCacheStrategy(DiskCacheStrategy.RESULT).into(holder.mPlaceImageView);
+        Glide.with(mContext).load(places.photos().get(0)).asBitmap().diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .into(new BitmapImageViewTarget(holder.mPlaceImageView) {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+                        super.onResourceReady(bitmap, glideAnimation);
+                        Palette.from(bitmap).generate(palette -> {
+                            Palette.Swatch vibrant = palette.getVibrantSwatch();
+                            Palette.Swatch mutedDark = palette.getDarkMutedSwatch();
+                            if (vibrant != null) {
+                                holder.mScrim.setBackground(new ColorDrawable(vibrant.getRgb()));
+                            }
+
+                        });
+                    }
+                });
+
+
         holder.itemView.setTag(places);
+        holder.mPlaceNickNameTextView.setText(places.tag());
         holder.mPlaceNameTextView.setText(places.place());
     }
 
@@ -77,15 +99,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         ImageView mPlaceImageView;
         @BindView(R.id.placeNameTextView)
         AppCompatTextView mPlaceNameTextView;
+        @BindView(R.id.placeNickNameTextView)
+        AppCompatTextView mPlaceNickNameTextView;
+        @BindView(R.id.rowScrim)
+        View mScrim;
 
         ViewHolder(View view, PlaceAdapterClickInterface placeAdapterClickInterface) {
             super(view);
             ButterKnife.bind(this, view);
             itemView.setOnClickListener(view1 -> {
                 Places places = (Places) view1.getTag();
-                ImageView imageView = (ImageView) view1.findViewById(R.id.placeImageView);
-                AppCompatTextView textView = (AppCompatTextView) view1.findViewById(R.id.placeNameTextView);
-                placeAdapterClickInterface.itemClicked(places, imageView, textView);
+                placeAdapterClickInterface.itemClicked(places, view1.findViewById(R.id.placeImageView), view1.findViewById(R.id.placeNameTextView));
             });
 
         }
