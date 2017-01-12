@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Next Stop</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -52,11 +52,14 @@
 
     <!-- Log Glide -->
     <string name="log_error">Glide url = %1$s : %2$s</string>
+    <string name="format_temperature"><xliff:g mId="temp">%1.0f</xliff:g></string>
+    <string name="value_units_metric">Metric</string>
+
     <string name="slide_it_down">Slide it down</string>
     <string name="filters">Filters</string>
     <string name="apply">APPLY</string>
     <string name="about_app">About</string>
-    <string name="sample_sub">Sample SUb</string>
+    <string name="sample_sub">Sample Sub</string>
     <string name="lorem">Lorem ipsum dolor sit amet, dicunt adipiscing dissentiunt his et, no vim
         vero falli vidisse. Ius in tation recteque, semper urbanitas et eam. At his laoreet fierent
         verterem, et doctus ocurreret duo. Expetenda evertitur est id, his libris placerat

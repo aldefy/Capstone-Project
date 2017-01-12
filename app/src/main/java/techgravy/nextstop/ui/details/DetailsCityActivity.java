@@ -41,7 +41,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.NSApplication;
 import techgravy.nextstop.R;
+import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.utils.WeatherUtils;
 
 /**
  * Created by aditlal on 25/12/16.
@@ -75,6 +77,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
     RecyclerView mRvTags;
     private Places mPlaces;
     public final static String EXTRA_PLACE = "EXTRA_PLACE";
+    public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";
     private List<String> mTagsList;
     private TagRVAdapter mTagRVAdapter;
 
@@ -109,6 +112,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
         mRvTags.setLayoutManager(new LinearLayoutManager(DetailsCityActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mRvTags.setAdapter(mTagRVAdapter);
         mDetailsPresenter.computePlaceTags(mPlaces);
+        mDetailsPresenter.getWeather(mPlaces.place());
 
         mTvOverview.setText(mPlaces.desc());
         Window window = getWindow();
@@ -186,12 +190,24 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
         }
     }
 
+
+    @Override
+    public void loadPlaceTags(List<String> placeTags) {
+        mTagsList.addAll(placeTags);
+        mTagRVAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void loadWeather(WeatherModel model) {
+        mTvWeather.setText(WeatherUtils.formatTemperature(DetailsCityActivity.this, model.temp(), "Metric"));
+        mIvWeatherIcon.setImageDrawable(WeatherUtils.getWeatherIconFromWeather(DetailsCityActivity.this, model.weatherID(), WeatherUtils.ICON_PACK_DEFAULT));
+    }
+
+
     @Override
     public void onBackPressed() {
         setResultAndFinish();
     }
-
-    public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";
 
     void setResultAndFinish() {
         final Intent resultData = new Intent();
@@ -200,9 +216,4 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
         finishAfterTransition();
     }
 
-    @Override
-    public void loadPlaceTags(List<String> placeTags) {
-        mTagsList.addAll(placeTags);
-        mTagRVAdapter.notifyDataSetChanged();
-    }
 }

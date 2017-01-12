@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="meteocons-typeface-1.1.0.1">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.mikepenz/meteocons-typeface/1.1.0.1/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.mikepenz/meteocons-typeface/1.1.0.1/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/meteocons-typeface/1.1.0.1/d977af60afe57f715242dcbaffffc2a014de3b49/meteocons-typeface-1.1.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

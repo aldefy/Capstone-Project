@@ -42,6 +42,8 @@ android {
         applicationVariants.all { variant ->
             variant.buildConfigField "String", "GOOGLE_API_KEY", "\"" + getUserAPIKey() + "\""
             variant.buildConfigField "String", "GOOGLE_URL", "\"" + getGoogleUrl() + "\""
+            variant.buildConfigField "String", "WEATHER_API_KEY", "\"" + getWeatherApiKey() + "\""
+            variant.buildConfigField "String", "WEATHER_URL", "\"" + getWeatherUrl() + "\""
 
         }
     }
@@ -62,10 +64,22 @@ def getGoogleUrl() {
     return props['GOOGLE_URL']
 }
 
+def getWeatherUrl() {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['WEATHER_URL']
+}
+
 def getUserAPIKey() {
     def Properties props = new Properties()
     props.load(new FileInputStream(new File('secrets.properties')))
     return props['GOOGLE_API_KEY']
+}
+
+def getWeatherApiKey() {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['WEATHER_API_KEY']
 }
 
 dependencies {
@@ -139,7 +153,9 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxVersion"
     compile 'com.binaryfork:spanny:1.0.4'
     compile 'com.github.medyo:android-about-page:1.1.1'
-
+    compile 'com.mikepenz:iconics-core:2.5.11@aar'
+    compile 'com.mikepenz:meteocons-typeface:1.1.0.1@aar'
+    compile 'com.mikepenz:weather-icons-typeface:2.0.10.1@aar'
 
     /*
         Annotation Processor libs - Dagger ,Auto value, etc

@@ -55,6 +55,5 @@
 
     <!--Weather-->
     <dimen name="weather_icon">40dp</dimen>
-    <dimen name="forecast_text_width">70dp</dimen>
 
 </resources>
