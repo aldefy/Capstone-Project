@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    xmlns:tools="http://schemas.android.com/tools"
+                                    android:layout_width="@dimen/spacing_crazy"
+                                    android:layout_height="@dimen/dimen_250dp"
+                                    android:layout_margin="@dimen/padding_normal"
+                                    android:orientation="vertical"
+                                    app:cardBackgroundColor="@color/white"
+                                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                                    app:cardElevation="@dimen/cardview_default_elevation">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivPlace"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/persona_bg"
+        />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.45"
+            android:background="@color/background_dark"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/placeNameTextView"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/spacing_normal"
+            android:clickable="false"
+            android:gravity="center"
+            android:maxLines="2"
+            android:transitionName="toolbarTitle"
+            tools:text="@string/sample"/>
+
+    </FrameLayout>
+
+</android.support.v7.widget.CardView>

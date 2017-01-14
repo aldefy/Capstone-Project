@@ -10,8 +10,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
-import techgravy.nextstop.ui.search.model.SearchResponse;
-import techgravy.nextstop.ui.search.model.SearchResults;
+import techgravy.nextstop.data.GoogleApiInterface;
+import techgravy.nextstop.data.model.SearchResponse;
+import techgravy.nextstop.data.model.SearchResults;
 import timber.log.Timber;
 
 /**
@@ -33,7 +34,7 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void queryForString(String query) {
         mView.showProgress();
-        retrofit.create(SearchApiInterface.class).textSearch(query)
+        retrofit.create(GoogleApiInterface.class).textSearch(query)
                 .subscribeOn(Schedulers.io())
                 .map(SearchResponse::getResultsList)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -47,7 +48,6 @@ public class SearchPresenter implements SearchContract.Presenter {
                     public void onNext(List<SearchResults> results) {
                         for (SearchResults result : results)
                             Timber.tag("SearchResults").d("result = " + result.toString());
-                        mView.hideProgress();
                         mView.showResults(results);
                     }
 
@@ -61,6 +61,7 @@ public class SearchPresenter implements SearchContract.Presenter {
 
                     @Override
                     public void onComplete() {
+                        mView.hideProgress();
                         Timber.tag("SearchResults").d("onComplete Called");
                     }
                 });

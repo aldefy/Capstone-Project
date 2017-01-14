@@ -41,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.NSApplication;
 import techgravy.nextstop.R;
+import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.utils.WeatherUtils;
@@ -79,7 +80,9 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
     public final static String EXTRA_PLACE = "EXTRA_PLACE";
     public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";
     private List<String> mTagsList;
+    private List<SearchResults> mSearchResultsList;
     private TagRVAdapter mTagRVAdapter;
+    private DetailsPOIRVAdapter mDetailsPOIRVAdapter;
 
     @Inject
     DetailsPresenter mDetailsPresenter;
@@ -95,7 +98,9 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
                 .detailsModule(new DetailsModule(DetailsCityActivity.this))
                 .build().inject(DetailsCityActivity.this);
         mTagsList = new ArrayList<>();
+        mSearchResultsList = new ArrayList<>();
         mTagRVAdapter = new TagRVAdapter(DetailsCityActivity.this, mTagsList);
+        mDetailsPOIRVAdapter = new DetailsPOIRVAdapter(DetailsCityActivity.this, mSearchResultsList);
         initViews();
     }
 
@@ -111,8 +116,11 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
         setupToolBar();
         mRvTags.setLayoutManager(new LinearLayoutManager(DetailsCityActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mRvTags.setAdapter(mTagRVAdapter);
+        mRvPOI.setLayoutManager(new LinearLayoutManager(DetailsCityActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        mRvPOI.setAdapter(mDetailsPOIRVAdapter);
         mDetailsPresenter.computePlaceTags(mPlaces);
         mDetailsPresenter.getWeather(mPlaces.place());
+        mDetailsPresenter.getPOI(mPlaces.place());
 
         mTvOverview.setText(mPlaces.desc());
         Window window = getWindow();
@@ -192,6 +200,12 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
 
 
     @Override
+    public void loadSearchResults(List<SearchResults> resultsList) {
+        mSearchResultsList.addAll(resultsList);
+        mDetailsPOIRVAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void loadPlaceTags(List<String> placeTags) {
         mTagsList.addAll(placeTags);
         mTagRVAdapter.notifyDataSetChanged();
@@ -206,6 +220,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
 
     @Override
     public void onBackPressed() {
+        mDetailsPresenter.onStop();
         setResultAndFinish();
     }
 

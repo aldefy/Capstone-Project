@@ -19,6 +19,9 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import techgravy.nextstop.BuildConfig;
+import techgravy.nextstop.data.GoogleApiInterface;
+import techgravy.nextstop.data.model.SearchResponse;
+import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
 import timber.log.Timber;
@@ -27,13 +30,13 @@ import timber.log.Timber;
  * Created by aditlal on 12/01/17 - 12.
  */
 
-public class DetailsPresenter implements DetailsContract.Presenter {
-    CompositeDisposable mCompositeDisposable;
+ class DetailsPresenter implements DetailsContract.Presenter {
+    private CompositeDisposable mCompositeDisposable;
     private DetailsContract.View mView;
     public Retrofit retrofit;
 
     @Inject
-    public DetailsPresenter(Retrofit retrofit, DetailsContract.View view) {
+    DetailsPresenter(Retrofit retrofit, DetailsContract.View view) {
         mView = view;
         mCompositeDisposable = new CompositeDisposable();
         this.retrofit = retrofit;
@@ -157,10 +160,43 @@ public class DetailsPresenter implements DetailsContract.Presenter {
 
     }
 
+
+    @Override
+    public void getPOI(String cityName) {
+        retrofit.create(GoogleApiInterface.class).textSearch(cityName + " point of interest")
+                .subscribeOn(Schedulers.io())
+                .map(SearchResponse::getResultsList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<SearchResults>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mCompositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(List<SearchResults> results) {
+                        for (SearchResults result : results)
+                            Timber.tag("SearchResults").d("result = " + result.toString());
+                        mView.loadSearchResults(results);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        Timber.tag("SearchResults").e(e, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Timber.tag("SearchResults").d("onComplete Called");
+                    }
+                });
+
+    }
+
+
     @Override
     public void onStop() {
         mCompositeDisposable.dispose();
     }
-
-
 }

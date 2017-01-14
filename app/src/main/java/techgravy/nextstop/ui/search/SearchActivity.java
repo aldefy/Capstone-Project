@@ -57,7 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import techgravy.nextstop.NSApplication;
 import techgravy.nextstop.R;
-import techgravy.nextstop.ui.search.model.SearchResults;
+import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.transitions.CircularReveal;
 import techgravy.nextstop.utils.ImeUtils;
 import techgravy.nextstop.utils.ItemOffsetDecoration;

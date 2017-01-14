@@ -1,4 +1,4 @@
-package techgravy.nextstop.ui.search.model;
+package techgravy.nextstop.data.model;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;

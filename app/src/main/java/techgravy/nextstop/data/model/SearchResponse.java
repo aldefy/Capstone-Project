@@ -1,4 +1,4 @@
-package techgravy.nextstop.ui.search.model;
+package techgravy.nextstop.data.model;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;

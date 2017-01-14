@@ -92,7 +92,7 @@
             android:exported="true"/>
 
         <provider
-            android:name=".ui.search.model.PlacesSuggestionProvider"
+            android:name=".data.model.PlacesSuggestionProvider"
             android:authorities="techgravy.nextstop.search_suggestion_provider"
             android:exported="false"
             android:syncable="false"/>

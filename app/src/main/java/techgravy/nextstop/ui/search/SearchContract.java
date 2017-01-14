@@ -2,7 +2,7 @@ package techgravy.nextstop.ui.search;
 
 import java.util.List;
 
-import techgravy.nextstop.ui.search.model.SearchResults;
+import techgravy.nextstop.data.model.SearchResults;
 
 /**
  * Created by aditlal on 26/12/16.
