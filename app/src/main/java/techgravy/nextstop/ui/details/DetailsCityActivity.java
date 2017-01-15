@@ -1,5 +1,6 @@
 package techgravy.nextstop.ui.details;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -8,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -37,14 +38,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.NSApplication;
 import techgravy.nextstop.R;
-import techgravy.nextstop.data.model.SearchResults;
+import techgravy.nextstop.ui.details.model.POI;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.utils.WeatherUtils;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by aditlal on 25/12/16.
@@ -76,17 +79,29 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
     LinearLayout mWeatherLayout;
     @BindView(R.id.rv_tags)
     RecyclerView mRvTags;
+    @BindColor(R.color.accent)
+    int accent;
+    @BindColor(R.color.accent_70)
+    int accent70;
+    @BindColor(R.color.background_dark)
+    int dark;
+
     private Places mPlaces;
     public final static String EXTRA_PLACE = "EXTRA_PLACE";
     public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";
     private List<String> mTagsList;
-    private List<SearchResults> mSearchResultsList;
+    private List<POI> mSearchResultsList;
     private TagRVAdapter mTagRVAdapter;
     private DetailsPOIRVAdapter mDetailsPOIRVAdapter;
 
     @Inject
     DetailsPresenter mDetailsPresenter;
+    private boolean shouldScroll;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +129,15 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
             finish();
         }
         setupToolBar();
+        mAppBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> shouldScroll = Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange());
+        mScrollContent.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (!shouldScroll)
+                    mScrollContent.fullScroll(ScrollView.FOCUS_UP);
+            }
+        });
+
         mRvTags.setLayoutManager(new LinearLayoutManager(DetailsCityActivity.this, LinearLayoutManager.HORIZONTAL, false));
         mRvTags.setAdapter(mTagRVAdapter);
         mRvPOI.setLayoutManager(new LinearLayoutManager(DetailsCityActivity.this, LinearLayoutManager.HORIZONTAL, false));
@@ -140,13 +164,13 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
                             if (vibrant != null) {
                                 mCollapsingToolbar.setContentScrim(new ColorDrawable(vibrant.getRgb()));
                             } else {
-                                mCollapsingToolbar.setContentScrim(new ColorDrawable(ContextCompat.getColor(DetailsCityActivity.this, R.color.accent_70)));
+                                mCollapsingToolbar.setContentScrim(new ColorDrawable(accent70));
                             }
 
                             if (darkVibrant != null) {
                                 window.setStatusBarColor(darkVibrant.getRgb());
                             } else {
-                                window.setStatusBarColor(ContextCompat.getColor(DetailsCityActivity.this, R.color.accent));
+                                window.setStatusBarColor(accent);
                             }
                         });
                     }
@@ -200,7 +224,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
 
 
     @Override
-    public void loadSearchResults(List<SearchResults> resultsList) {
+    public void loadSearchResults(List<POI> resultsList) {
         mSearchResultsList.addAll(resultsList);
         mDetailsPOIRVAdapter.notifyDataSetChanged();
     }
@@ -214,7 +238,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
     @Override
     public void loadWeather(WeatherModel model) {
         mTvWeather.setText(WeatherUtils.formatTemperature(DetailsCityActivity.this, model.temp(), "Metric"));
-        mIvWeatherIcon.setImageDrawable(WeatherUtils.getWeatherIconFromWeather(DetailsCityActivity.this, model.weatherID(), WeatherUtils.ICON_PACK_DEFAULT));
+        mIvWeatherIcon.setImageDrawable(WeatherUtils.getWeatherIconFromWeather(DetailsCityActivity.this, model.weatherID(), WeatherUtils.ICON_PACK_METEOCONCS));
     }
 
 

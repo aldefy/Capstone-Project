@@ -4,9 +4,9 @@ import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 import java.util.List;
+import java.util.Random;
 
 import techgravy.nextstop.BuildConfig;
-import techgravy.nextstop.utils.CommonUtils;
 
 /**
  * Created by aditlal on 27/12/16.
@@ -35,8 +35,11 @@ public class SearchResults {
     private SearchResultGeometry geometry;
 
     public String generatePhotoUrl() {
-        SearchResultPhotos photo = getSearchResultPhotosList().get(0);
-        return BuildConfig.GOOGLE_URL + "photo?maxwidth=" + CommonUtils.df.format(photo.getWidth())
+        int min = 0;
+        int max = getSearchResultPhotosList().size();
+        Random rand = new Random();
+        SearchResultPhotos photo = getSearchResultPhotosList().get(rand.nextInt((max - min) ));
+        return BuildConfig.GOOGLE_URL + "photo?maxwidth=" + "800"
                 + "&photoreference=" + photo.getPhoto_reference() + "&key=" + BuildConfig.GOOGLE_API_KEY;
     }
 

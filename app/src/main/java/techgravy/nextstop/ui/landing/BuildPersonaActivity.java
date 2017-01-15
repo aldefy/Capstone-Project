@@ -1,5 +1,6 @@
 package techgravy.nextstop.ui.landing;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.ui.home.HomeActivity;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by aditlal on 16/12/16 - 16.
@@ -59,6 +61,11 @@ public class BuildPersonaActivity extends AppCompatActivity implements PersonaGr
     private DatabaseReference database;
     private SharedPrefManager prefManager;
     private CompositeSubscription compositeSubscription;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

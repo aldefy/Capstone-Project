@@ -2,6 +2,12 @@ package techgravy.nextstop.ui.details;
 
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.github.simonpercic.oklog3.OkLogInterceptor;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.ArrayList;
@@ -19,27 +25,31 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import techgravy.nextstop.BuildConfig;
-import techgravy.nextstop.data.GoogleApiInterface;
-import techgravy.nextstop.data.model.SearchResponse;
-import techgravy.nextstop.data.model.SearchResults;
+import techgravy.nextstop.ui.details.model.AutoJson_POI;
+import techgravy.nextstop.ui.details.model.POI;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.utils.FirebaseJSONUtil;
 import timber.log.Timber;
 
 /**
  * Created by aditlal on 12/01/17 - 12.
  */
 
- class DetailsPresenter implements DetailsContract.Presenter {
+class DetailsPresenter implements DetailsContract.Presenter {
     private CompositeDisposable mCompositeDisposable;
     private DetailsContract.View mView;
     public Retrofit retrofit;
+    private DatabaseReference mDatabaseReference;
+
 
     @Inject
     DetailsPresenter(Retrofit retrofit, DetailsContract.View view) {
         mView = view;
         mCompositeDisposable = new CompositeDisposable();
         this.retrofit = retrofit;
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
     }
 
     @Override
@@ -163,7 +173,31 @@ import timber.log.Timber;
 
     @Override
     public void getPOI(String cityName) {
-        retrofit.create(GoogleApiInterface.class).textSearch(cityName + " point of interest")
+        Query query = mDatabaseReference.child("place_details").child(cityName);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    try {
+                        List<POI> results = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            POI poi = FirebaseJSONUtil.deserialize(snapshot, AutoJson_POI.class);
+                            Timber.tag("POI").d(poi.place());
+                            results.add(poi);
+                        }
+                        mView.loadSearchResults(results);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+     /*   retrofit.create(GoogleApiInterface.class).textSearch("Attractions in "+ cityName)
                 .subscribeOn(Schedulers.io())
                 .map(SearchResponse::getResultsList)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -190,7 +224,7 @@ import timber.log.Timber;
                     public void onComplete() {
                         Timber.tag("SearchResults").d("onComplete Called");
                     }
-                });
+                });*/
 
     }
 

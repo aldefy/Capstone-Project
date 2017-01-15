@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.binaryfork.spanny.Spanny;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -74,14 +75,14 @@ public class GettingStartedFragment extends Fragment {
 
         switch (page) {
             case 0:
-                Glide.with(getActivity()).load(R.drawable.landing_1).into(containerImageView);
+                Glide.with(getActivity()).load(R.drawable.landing_1).diskCacheStrategy(DiskCacheStrategy.RESULT).into(containerImageView);
                 spanny = new Spanny(getString(R.string.desc_1))
                         .append(" " + getString(R.string.desc_1_append_1), new ForegroundColorSpan(sandstorm));
                 descriptionText.setText(spanny);
                 subDescriptionText.setText(getString(R.string.sub_desc_1));
                 break;
             case 1:
-                Glide.with(getActivity()).load(R.drawable.landing_2).into(containerImageView);
+                Glide.with(getActivity()).load(R.drawable.landing_2).diskCacheStrategy(DiskCacheStrategy.RESULT).into(containerImageView);
                 spanny = new Spanny(getString(R.string.desc_2))
                         .append(getString(R.string.desc_2_append_1), new ForegroundColorSpan(coral))
                         .append(getString(R.string.desc_2_append_2));
@@ -89,7 +90,7 @@ public class GettingStartedFragment extends Fragment {
                 subDescriptionText.setText(getString(R.string.sub_desc_2));
                 break;
             case 2:
-                Glide.with(getActivity()).load(R.drawable.landing_3).into(containerImageView);
+                Glide.with(getActivity()).load(R.drawable.landing_3).diskCacheStrategy(DiskCacheStrategy.RESULT).into(containerImageView);
                 spanny = new Spanny(getString(R.string.desc_3))
                         .append(" "+getString(R.string.desc_3_append_1), new ForegroundColorSpan(yellowGreen))
                         .append(getString(R.string.desc_3_append_2));

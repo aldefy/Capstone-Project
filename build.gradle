@@ -57,6 +57,7 @@ ext {
     rx2adapter ='1.0.0'
     daggerVersion ='2.7'
     auto_json ='1.0.3'
+    calligraphy ='2.2.0'
 
     def BOOLEAN = "boolean"
     def TRUE = "true"

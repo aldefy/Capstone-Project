@@ -17,6 +17,7 @@ import techgravy.nextstop.ui.home.model.PlaceLatLng;
 import techgravy.nextstop.utils.PlacesLatLngConverter;
 import techgravy.nextstop.utils.logger.LoggerTree;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by aditlal on 13/12/16.
@@ -41,6 +42,10 @@ public class NSApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         mNSApplication = this;
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setupDependencies();
     }
 

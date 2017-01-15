@@ -54,6 +54,6 @@
 
 
     <!--Weather-->
-    <dimen name="weather_icon">40dp</dimen>
+    <dimen name="weather_icon">36dp</dimen>
 
 </resources>

@@ -1,5 +1,6 @@
 package techgravy.nextstop.ui.about;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -14,6 +15,7 @@ import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 import techgravy.nextstop.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by aditlal on 06/01/17.
@@ -26,6 +28,11 @@ public class AboutActivity extends AppCompatActivity {
     AppBarLayout mAppBar;
     @BindView(R.id.content)
     FrameLayout mContent;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

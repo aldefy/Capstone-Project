@@ -1,6 +1,7 @@
 package techgravy.nextstop.ui.landing;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,8 +25,12 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.jakewharton.rxbinding.view.RxView;
 
 import org.json.JSONException;
@@ -48,8 +53,10 @@ import techgravy.nextstop.base.PagerAdapter;
 import techgravy.nextstop.data.FacebookProfile;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.data.User;
+import techgravy.nextstop.ui.home.HomeActivity;
 import techgravy.nextstop.utils.ParallaxPagerTransformer;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static timber.log.Timber.tag;
 
@@ -79,6 +86,11 @@ public class LandingActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference database;
     private ProgressDialog progressDialog;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,6 +130,7 @@ public class LandingActivity extends AppCompatActivity {
 
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), fragmentList);
         pagerContainer.setAdapter(pagerAdapter);
+        pagerContainer.setOffscreenPageLimit(2);
         pagerContainer.setPageTransformer(false, new ParallaxPagerTransformer());
         pageSwitcher(4);
         pagerContainer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -137,8 +150,10 @@ public class LandingActivity extends AppCompatActivity {
             }
 
         });
-
-        Subscription startBtnSub = RxView.clicks(startBtn).subscribe(view -> LandingActivity.this.authWithFacebook());
+        Subscription startBtnSub = RxView.clicks(startBtn).subscribe(view -> {
+            timer.cancel();
+            LandingActivity.this.authWithFacebook();
+        });
         compositeSubscription.add(startBtnSub);
     }
 
@@ -252,15 +267,39 @@ public class LandingActivity extends AppCompatActivity {
 
     private void writeNewUser(FirebaseUser firebaseUser, FacebookProfile fbProfile) {
         User user = new User("https://graph.facebook.com/" + fbProfile.getId() + "/picture?type=large", fbProfile.getName(), new ArrayList<>());
-        database.child("users").child(firebaseUser.getUid()).setValue(user);
-        SharedPrefManager prefManager = SharedPrefManager.getInstance(getApplicationContext());
-        prefManager.setAvatarUrl(user.getPhotoUrl());
-        prefManager.setUUID(firebaseUser.getUid());
-        prefManager.setUserFullName(fbProfile.getName());
-        progressDialog.dismiss();
         Timber.tag(TAG).d("onAuthStateChanged: signed_in:" + firebaseUser.getUid());
-        startActivity(new Intent(LandingActivity.this, BuildPersonaActivity.class));
-        finishAffinity();
+        Query query = database.child("users").orderByChild(firebaseUser.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Timber.tag(TAG).d(dataSnapshot.toString());
+                database.child("users").child(firebaseUser.getUid()).setValue(user);
+                SharedPrefManager prefManager = SharedPrefManager.getInstance(getApplicationContext());
+                prefManager.setAvatarUrl(user.getPhotoUrl());
+                prefManager.setUUID(firebaseUser.getUid());
+                prefManager.setUserFullName(fbProfile.getName());
+                if (!dataSnapshot.exists()) {
+                    startActivity(new Intent(LandingActivity.this, BuildPersonaActivity.class));
+                    finishAffinity();
+                } else {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user.getPersonaTagsList() != null)
+                        startActivity(new Intent(LandingActivity.this, HomeActivity.class));
+                    else
+                        startActivity(new Intent(LandingActivity.this, BuildPersonaActivity.class));
+
+                    finishAffinity();
+                }
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Timber.tag(TAG).e(databaseError.getMessage());
+            }
+        });
+
+
     }
 
     @Override
@@ -272,9 +311,9 @@ public class LandingActivity extends AppCompatActivity {
     Timer timer;
     int page = 0;
 
-    public void pageSwitcher(int seconds) {
+    public void pageSwitcher(int mSecs) {
         timer = new Timer();
-        timer.scheduleAtFixedRate(new RemindTask(), 0, seconds * 1000);
+        timer.scheduleAtFixedRate(new RemindTask(), 0, mSecs * 1000);
     }
 
     class RemindTask extends TimerTask {
@@ -283,7 +322,8 @@ public class LandingActivity extends AppCompatActivity {
         public void run() {
             runOnUiThread(() -> {
                 if (page > 3) {
-                    timer.cancel();
+                    pagerContainer.setCurrentItem(0);
+                    page = 0;
                 } else {
                     pagerContainer.setCurrentItem(page++);
                 }

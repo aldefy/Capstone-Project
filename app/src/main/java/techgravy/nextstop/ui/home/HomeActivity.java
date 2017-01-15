@@ -57,6 +57,7 @@ import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -128,6 +129,11 @@ public class HomeActivity extends AppCompatActivity
         }
     };
     private Animation alphaAnimation;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

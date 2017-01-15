@@ -19,6 +19,7 @@ package techgravy.nextstop.ui.search;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SharedElementCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -62,6 +63,7 @@ import techgravy.nextstop.ui.transitions.CircularReveal;
 import techgravy.nextstop.utils.ImeUtils;
 import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.TransitionsUtil;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SearchActivity extends Activity implements SearchContract.View {
 
@@ -95,6 +97,11 @@ public class SearchActivity extends Activity implements SearchContract.View {
 
     @Inject
     SearchPresenter mSearchPresenter;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

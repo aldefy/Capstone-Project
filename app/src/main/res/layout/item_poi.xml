@@ -12,6 +12,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:foreground="@drawable/view_ripple"
         android:orientation="vertical">
 
         <ImageView

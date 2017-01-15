@@ -10,13 +10,17 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import techgravy.nextstop.R;
-import techgravy.nextstop.data.model.SearchResults;
+import techgravy.nextstop.ui.details.model.POI;
+import timber.log.Timber;
 
 /**
  * Created by aditlal on 27/12/16.
@@ -25,9 +29,9 @@ import techgravy.nextstop.data.model.SearchResults;
 public class DetailsPOIRVAdapter extends RecyclerView.Adapter<DetailsPOIRVAdapter.ViewHolder> {
     private final LayoutInflater layoutInflater;
     private Context mContext;
-    List<SearchResults> mResultsList;
+    List<POI> mResultsList;
 
-    public DetailsPOIRVAdapter(Context context, List<SearchResults> resultsList) {
+    public DetailsPOIRVAdapter(Context context, List<POI> resultsList) {
         this.layoutInflater = LayoutInflater.from(context);
         mContext = context;
         mResultsList = resultsList;
@@ -47,17 +51,28 @@ public class DetailsPOIRVAdapter extends RecyclerView.Adapter<DetailsPOIRVAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SearchResults results = mResultsList.get(position);
-        if (results.getSearchResultPhotosList() != null && results.getSearchResultPhotosList().size() > 0) {
-            holder.mPlaceImageView.layout(0, 0, 0, 0);
-            Glide.with(mContext).load(results.generatePhotoUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .into(holder.mPlaceImageView);
+        POI results = mResultsList.get(position);
+        holder.mPlaceImageView.layout(0, 0, 0, 0);
+        Glide.with(mContext).load(results.photo())
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .fitCenter()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        Timber.tag("Glide").d(mContext.getString(R.string.log_error), model, e.getMessage());
+                        return false;
+                    }
 
-        }
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        Timber.tag("Glide").d(mContext.getString(R.string.log_error), model, " is Loading");
+                        return false;
+                    }
+                })
+                .into(holder.mPlaceImageView);
+
         holder.itemView.setTag(results);
-        holder.mPlaceNameTextView.setText(results.getName());
+        holder.mPlaceNameTextView.setText(results.place());
     }
 
     @Override
