@@ -19,6 +19,7 @@ package techgravy.nextstop.ui.search;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SharedElementCallback;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
@@ -58,11 +59,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import techgravy.nextstop.NSApplication;
 import techgravy.nextstop.R;
+import techgravy.nextstop.data.DatabaseContract.SearchColumns;
+import techgravy.nextstop.data.DatabaseHandler;
+import techgravy.nextstop.data.SearchUpdateService;
 import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.transitions.CircularReveal;
+import techgravy.nextstop.utils.CommonUtils;
 import techgravy.nextstop.utils.ImeUtils;
 import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.TransitionsUtil;
+import techgravy.nextstop.utils.logger.Logger;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SearchActivity extends Activity implements SearchContract.View {
@@ -91,6 +97,7 @@ public class SearchActivity extends Activity implements SearchContract.View {
     FrameLayout mContainer;
 
     private SearchResultsAdapter mSearchAdapter;
+    private DatabaseHandler dbHandler;
     private List<SearchResults> mResultsList;
     private TextView noResults;
     private SparseArray<Transition> transitions = new SparseArray<>();
@@ -112,6 +119,7 @@ public class SearchActivity extends Activity implements SearchContract.View {
         }
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+        dbHandler = new DatabaseHandler(SearchActivity.this);
         setupRecyclerView();
         setupSearchView();
         DaggerSearchComponent.builder()
@@ -212,6 +220,7 @@ public class SearchActivity extends Activity implements SearchContract.View {
     void searchFor(String query) {
         clearResults();
         mSearchView.clearFocus();
+        updateDB(query);
         mSearchPresenter.queryForString(query);
 
     }
@@ -294,6 +303,15 @@ public class SearchActivity extends Activity implements SearchContract.View {
             mEmpty.setVisibility(View.GONE);
             setNoResultsVisibility(View.VISIBLE);
         }
+    }
+
+    private void updateDB(String searchResult) {
+        //Insert a new item
+        ContentValues values = new ContentValues();
+        values.put(SearchColumns.KEY_ID, CommonUtils.getID());
+        values.put(SearchColumns.KEY_NAME, searchResult);
+        Logger.d("Database", values.toString());
+        SearchUpdateService.insertNewResult(this, values);
     }
 
     @Override

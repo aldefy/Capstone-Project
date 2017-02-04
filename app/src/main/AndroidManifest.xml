@@ -46,13 +46,13 @@
             android:name=".ui.home.HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Home"
-            />
+        />
 
         <activity
             android:name=".ui.details.DetailsCityActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Details_City"
-            />
+        />
         <activity
             android:name=".ui.search.SearchActivity"
             android:launchMode="singleTop"
@@ -74,7 +74,7 @@
             android:name=".ui.about.AboutActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.About"
-            />
+        />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -96,6 +96,14 @@
             android:authorities="techgravy.nextstop.search_suggestion_provider"
             android:exported="false"
             android:syncable="false"/>
+
+        <provider
+            android:name=".data.SearchProvider"
+            android:authorities="nextstop.authority"
+            android:exported="false"/>
+        <service
+            android:name=".data.SearchUpdateService"
+            android:exported="false" />
 
         <!-- Glide configurations for image loading -->
         <meta-data

@@ -35,6 +35,13 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.mancj.slideup.SlideUp;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +49,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -108,8 +116,12 @@ public class HomeActivity extends AppCompatActivity
     private List<String> personaList;
     private List<PersonaTags> tagsList;
     private FilterAdapter mFilterAdapter;
-
-
+    @BindColor(R.color.drawer_dark_bg)
+    int drawerBackground;
+    @BindColor(R.color.white)
+    int white;
+    @BindColor(R.color.accent)
+    int accent;
     private ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -153,6 +165,30 @@ public class HomeActivity extends AppCompatActivity
 
     private void setupViews() {
         setupToolbar();
+        // Create the AccountHeader
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header)
+                .addProfiles(new ProfileDrawerItem().withName(sharedPrefManager.getUserFullName()).withIcon(sharedPrefManager.getAvatarUrl()).withIdentifier(100))
+                .build();
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_home);
+        item1.withTextColor(white);
+        item1.withSelectedColor(drawerBackground);
+        item1.withSelectedTextColor(accent);
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_settings);
+        item2.withTextColor(white);
+        item2.withSelectedTextColor(accent);
+        item2.withSelectedColor(drawerBackground);
+
+
+        new DrawerBuilder()
+                .withToolbar(mToolbar)
+                .withSliderBackgroundColor(drawerBackground)
+                .addDrawerItems(item1,
+                        new DividerDrawerItem(),
+                        item2)
+                .withAccountHeader(headerResult)
+                .withActivity(this).build();
         showFab();
         alphaAnimation = AnimationUtils.loadAnimation(this, R.anim.alpha);
         mCompositeSubscription = new CompositeSubscription();

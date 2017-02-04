@@ -10,7 +10,8 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.home.HomeActivity">
+        tools:context=".ui.home.HomeActivity" android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBar"
@@ -40,6 +41,7 @@
             android:background="@drawable/btn_fab_default"
             app:backgroundTint="@color/accent"
             app:borderWidth="0dp"
+            app:layout_behavior="techgravy.nextstop.utils.ScrollAwareFABBehavior"
             app:elevation="@dimen/default_elevation"
             app:layout_anchorGravity="bottom|right|end"
             app:pressedTranslationZ="@dimen/z_fab_pressed"

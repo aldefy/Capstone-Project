@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="SlideUp-Android-1.0-beta">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.mancj/SlideUp-Android/1.0-beta/jars/classes.jar!/" />
       <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.mancj/SlideUp-Android/1.0-beta/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.mancj/SlideUp-Android/1.0-beta/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

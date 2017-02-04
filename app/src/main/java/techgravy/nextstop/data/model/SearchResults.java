@@ -14,23 +14,41 @@ import techgravy.nextstop.BuildConfig;
 
 @JsonObject
 public class SearchResults {
+    /*Empty Constructor*/
+    public SearchResults() {
+    }
+
+
+    public SearchResults(String id, String reference, String name) {
+        mId = id;
+        mReference = reference;
+        mName = name;
+    }
 
     @JsonField(name = "photos")
     private List<SearchResultPhotos> mSearchResultPhotosList;
+
     @JsonField(name = "id")
     private String mId;
+
     @JsonField(name = "place_id")
     private String mPlaceId;
+
     @JsonField(name = "icon")
     private String mIcon;
+
     @JsonField(name = "name")
     private String mName;
+
     @JsonField(name = "formatted_address")
     private String mFormattedAddress;
+
     @JsonField(name = "types")
     private List<String> mTypes;
+
     @JsonField(name = "reference")
     private String mReference;
+
     @JsonField(name = "geometry")
     private SearchResultGeometry geometry;
 
@@ -38,7 +56,7 @@ public class SearchResults {
         int min = 0;
         int max = getSearchResultPhotosList().size();
         Random rand = new Random();
-        SearchResultPhotos photo = getSearchResultPhotosList().get(rand.nextInt((max - min) ));
+        SearchResultPhotos photo = getSearchResultPhotosList().get(rand.nextInt((max - min)));
         return BuildConfig.GOOGLE_URL + "photo?maxwidth=" + "800"
                 + "&photoreference=" + photo.getPhoto_reference() + "&key=" + BuildConfig.GOOGLE_API_KEY;
     }

@@ -7,12 +7,19 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
  * Created by aditlal on 27/12/16.
  */
 @JsonObject
-public class SearchResultPhotos {
-    @JsonField
+class SearchResultPhotos {
+
+    /*Empty Constructor*/
+    SearchResultPhotos() {
+    }
+
+    @JsonField(name = "photo_reference")
     private String photo_reference;
-    @JsonField
+
+    @JsonField(name = "height")
     public Double height;
-    @JsonField
+
+    @JsonField(name = "width")
     public Double width;
 
     public String getPhoto_reference() {
