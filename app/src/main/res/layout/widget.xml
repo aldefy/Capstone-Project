@@ -19,11 +19,11 @@
                     android:layout_height="match_parent" android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true">
         <ImageView
-                android:id="@+id/leftNav" android:layout_width="48dp"
+                android:id="@+id/leftNav" android:layout_width="@dimen/spacing_xlarge"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_left"
-                android:layout_height="48dp"/>
+                android:layout_height="@dimen/spacing_xlarge"/>
         <TextView
                 android:id="@+id/placeNameTextView"
                 android:layout_width="wrap_content"
@@ -39,12 +39,12 @@
                 android:textStyle="bold"
                 android:layout_marginTop="@dimen/spacing_large"
         />
-        <ImageView android:layout_width="48dp"
+        <ImageView android:layout_width="@dimen/spacing_xlarge"
                    android:id="@+id/rightNav"
                    android:layout_centerVertical="true"
                    android:layout_alignParentEnd="true"
                    android:src="@drawable/ic_right"
-                   android:layout_height="48dp"/>
+                   android:layout_height="@dimen/spacing_xlarge"/>
 
     </RelativeLayout>
 
