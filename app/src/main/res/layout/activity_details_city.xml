@@ -29,6 +29,7 @@
                 android:id="@+id/placeImageView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_250dp"
+                android:contentDescription="@string/image"
                 android:adjustViewBounds="true"
                 android:background="?attr/colorPrimary"
                 android:minHeight="@dimen/dimen_180dp"
@@ -128,6 +129,7 @@
                     android:id="@+id/iv_weather_icon"
                     android:layout_width="@dimen/weather_icon"
                     android:layout_height="@dimen/weather_icon"
+                    android:contentDescription="@string/weather"
                     android:layout_marginStart="@dimen/spacing_normal"
                     android:clickable="false"
                     tools:src="@drawable/about_icon_email"/>
