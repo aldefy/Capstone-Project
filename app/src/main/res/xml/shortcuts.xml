@@ -14,15 +14,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+<shortcuts xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android"
+           tools:targetApi="n_mr1">
 
     <shortcut
-        android:shortcutId="search"
-        android:icon="@drawable/ic_shortcut_search"
-        android:enabled="true"
-        android:shortcutShortLabel="@string/shortcut_search_short_label"
-        android:shortcutLongLabel="@string/shortcut_search_long_label"
-        android:shortcutDisabledMessage="@string/shortcut_search_disabled">
+            android:shortcutId="search"
+            android:icon="@drawable/ic_shortcut_search"
+            android:enabled="true"
+            android:shortcutShortLabel="@string/shortcut_search_short_label"
+            android:shortcutLongLabel="@string/shortcut_search_long_label"
+            android:shortcutDisabledMessage="@string/shortcut_search_disabled"
+           >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetClass="techgravy.nextstop.ui.search.SearchActivity"

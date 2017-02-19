@@ -10,12 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mehdi.sakout.aboutpage.AboutPage;
 import mehdi.sakout.aboutpage.Element;
 import techgravy.nextstop.R;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by aditlal on 06/01/17.
@@ -45,10 +46,10 @@ public class AboutActivity extends AppCompatActivity {
                 .isRTL(false)
                 .setImage(R.mipmap.ic_launcher)
                 .setDescription(getString(R.string.about_desc))
-                .addEmail("aditlal90@gmail.com")
-                .addWebsite("http://aditlal.net")
-                .addGitHub("aldefy/Capstone-Project")
-                .addItem(new Element().setTitle("Version 1.00"))
+                .addEmail(getString(R.string.my_email))
+                .addWebsite(getString(R.string.my_site))
+                .addGitHub(getString(R.string.Project))
+                .addItem(new Element().setTitle(getString(R.string.version)))
                 .create();
         mContent.addView(aboutPage);
     }

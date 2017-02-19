@@ -24,8 +24,9 @@ import timber.log.Timber;
 public class CommonUtils {
 
     public static DecimalFormat df = new DecimalFormat("#");
+    public static final String TIME_FORMAT = "yyyyMMddHHmmss";
     // Ex : 20161001214120
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+    private static DateTimeFormatter formatter = DateTimeFormat.forPattern(TIME_FORMAT);
     private final static AtomicInteger c = new AtomicInteger(0);
 
     public static DateTime getFormattedDateTime(String dateString) {
