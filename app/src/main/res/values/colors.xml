@@ -47,6 +47,7 @@
     <color name="dimBg">#bf000000
     </color>
     <color name="details_bg">#0b3343</color>
+    <color name="widget_background">#55000000</color>
 
     <!-- this is blended with immersive_bars to produce the desired status bar color i.e. background_super_dark -->
 
