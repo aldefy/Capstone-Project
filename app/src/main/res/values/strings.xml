@@ -93,6 +93,7 @@
     <string name="luxury">Luxury</string>
     <string name="users">users</string>
     <string name="persona_tags">personaTags</string>
+    <string name="persona">persona</string>
 
 </resources>
 

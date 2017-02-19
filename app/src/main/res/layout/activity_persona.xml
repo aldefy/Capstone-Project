@@ -15,6 +15,7 @@
                 android:id="@+id/containerImageView"
                 android:layout_width="match_parent"
                 tools:src="@drawable/persona_bg"
+                android:contentDescription="@string/persona"
                 android:scaleType="fitXY"
                 android:layout_height="match_parent"/>
         <View
