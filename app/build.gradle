@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 android {
+    signingConfigs {
+        release {
+            keyAlias 'NextStop'
+            keyPassword 'VJZkRD'
+            storeFile file('/Users/aditlal/Documents/GitProj/Nanodegree/Capstone-Project/nextstop.jks')
+            storePassword 'VJZkRD'
+        }
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     /* dexOptions {
@@ -24,6 +32,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors{
+        demo{
+            applicationId "techgravy.nextstop"
         }
     }
     compileOptions {
