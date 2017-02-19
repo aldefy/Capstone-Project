@@ -53,6 +53,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -66,7 +67,6 @@ import techgravy.nextstop.data.DatabaseHandler;
 import techgravy.nextstop.data.SearchUpdateService;
 import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.transitions.CircularReveal;
-import techgravy.nextstop.utils.CommonUtils;
 import techgravy.nextstop.utils.ImeUtils;
 import techgravy.nextstop.utils.TransitionsUtil;
 import techgravy.nextstop.utils.logger.Logger;
@@ -308,7 +308,7 @@ public class SearchActivity extends Activity implements SearchContract.View {
     private void updateDB(String searchResult) {
         //Insert a new item
         ContentValues values = new ContentValues();
-        values.put(SearchColumns.KEY_ID, CommonUtils.getID());
+        values.put(SearchColumns.KEY_ID, UUID.randomUUID().toString());
         values.put(SearchColumns.KEY_NAME, searchResult);
         Logger.d("Database", values.toString());
         SearchUpdateService.insertNewResult(this, values);

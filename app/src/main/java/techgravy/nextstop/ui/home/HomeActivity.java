@@ -11,6 +11,7 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -20,7 +21,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -154,7 +154,9 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setExitTransition(new Explode());
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new Explode());
+        }*/
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
@@ -525,7 +527,11 @@ public class HomeActivity extends AppCompatActivity
         ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, Pair.create(imageView, imageView.getTransitionName()),
                         Pair.create(textView, textView.getTransitionName()));
-        startActivityForResult(intent, REQUEST_PLACE, options.toBundle());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startActivityForResult(intent, REQUEST_PLACE, options.toBundle());
+        } else {
+            startActivityForResult(intent, REQUEST_PLACE);
+        }
     }
 
     @Override

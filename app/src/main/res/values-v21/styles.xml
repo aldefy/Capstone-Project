@@ -8,11 +8,10 @@
         <item name="android:selectableItemBackground">@drawable/view_ripple</item>
         <item name="selectableItemBackgroundBorderless">@drawable/view_ripple</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-
 
 
     <style name="AppTheme.NoActionBar">
