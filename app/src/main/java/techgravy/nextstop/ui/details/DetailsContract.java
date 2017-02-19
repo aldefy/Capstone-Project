@@ -2,6 +2,7 @@ package techgravy.nextstop.ui.details;
 
 import java.util.List;
 
+import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.details.model.POI;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;

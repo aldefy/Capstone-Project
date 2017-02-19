@@ -71,6 +71,8 @@
     </string>
     <string name="drawer_item_home">Home</string>
     <string name="drawer_item_settings">Settings</string>
+    <string name="image">image</string>
+    <string name="plan_your_trip_to">Plan your trip</string>
 
 </resources>
 

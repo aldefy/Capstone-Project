@@ -2,6 +2,7 @@ package techgravy.nextstop.ui.home;
 
 import android.animation.Animator;
 import android.app.ActivityOptions;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -19,6 +20,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +45,8 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +60,7 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
+import techgravy.nextstop.ui.SimpleWidgetProvider;
 import techgravy.nextstop.ui.about.AboutActivity;
 import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
@@ -65,7 +70,6 @@ import techgravy.nextstop.utils.AnimUtils;
 import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
 import timber.log.Timber;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -150,6 +154,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setExitTransition(new Explode());
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
@@ -394,6 +399,16 @@ public class HomeActivity extends AppCompatActivity
         mPlacesList.clear();
         mPlacesList.addAll(placesList);
         mHomeAdapter.notifyDataSetChanged();
+
+        updateWidgets();
+    }
+
+    private void updateWidgets() {
+        Intent intent = new Intent(this, SimpleWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {R.xml.app_widget};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 
     @Override

@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/widget_margin"
+                android:background="#55000000">
+
+    <ImageView
+            android:id="@+id/placeImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:src="@color/accent"/>
+
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:padding="@dimen/spacing_normal"
+                    android:layout_height="match_parent" android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true">
+        <ImageView
+                android:id="@+id/leftNav" android:layout_width="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_left"
+                android:layout_height="48dp"/>
+        <TextView
+                android:id="@+id/placeNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                tools:text="New york"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text_medium"
+                android:padding="@dimen/padding_large"
+                android:layout_toEndOf="@+id/leftNav"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/rightNav"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/spacing_large"
+        />
+        <ImageView android:layout_width="48dp"
+                   android:id="@+id/rightNav"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentEnd="true"
+                   android:src="@drawable/ic_right"
+                   android:layout_height="48dp"/>
+
+    </RelativeLayout>
+
+
+    <TextView android:layout_alignParentBottom="true"
+              android:id="@+id/planTextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/padding_normal"
+              android:background="@color/white"
+              android:textColor="@color/black_87"
+              android:text="@string/plan_your_trip_to"/>
+
+</RelativeLayout>

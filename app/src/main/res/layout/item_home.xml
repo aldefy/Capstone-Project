@@ -16,7 +16,7 @@
         android:clickable="false"
         android:scaleType="center"
         android:transitionName="toolbarImage"
-        tools:src="@drawable/landing_3"/>
+        tools:src="@drawable/landing_3" android:contentDescription="@string/image"/>
 
     <View
         android:id="@+id/rowScrim"

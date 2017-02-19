@@ -33,6 +33,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,7 @@ import techgravy.nextstop.ui.details.model.POI;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.utils.WeatherUtils;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import techgravy.nextstop.utils.logger.Logger;
 
 /**
  * Created by aditlal on 25/12/16.
@@ -88,6 +90,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
 
     private Places mPlaces;
     public final static String EXTRA_PLACE = "EXTRA_PLACE";
+    public final static String WIDGET_PLACE = "WIDGET_PLACE";
     public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";
     private List<String> mTagsList;
     private List<POI> mSearchResultsList;
@@ -121,13 +124,18 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
 
     private void initViews() {
         mPlaceNameTextView.setTransitionName("toolbarTitle");
-        final Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_PLACE)) {
+        Intent intent = getIntent();
+        Logger.t("intent").printIntent(getIntent());
+        if (intent.hasExtra(WIDGET_PLACE)) {
+            Logger.t("PlaceWidget").d("Place to be loaded =" + ((Places) getIntent().getParcelableExtra(WIDGET_PLACE)).place());
+        } else if (intent.hasExtra(EXTRA_PLACE)) {
             mPlaces = getIntent().getParcelableExtra(EXTRA_PLACE);
             postponeEnterTransition();
         } else {
             finish();
         }
+
+        Logger.t("PlaceDetail").d(mPlaces.place());
         setupToolBar();
         mAppBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> shouldScroll = Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange());
         mScrollContent.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

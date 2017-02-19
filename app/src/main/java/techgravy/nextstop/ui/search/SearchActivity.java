@@ -49,6 +49,8 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,10 +68,8 @@ import techgravy.nextstop.data.model.SearchResults;
 import techgravy.nextstop.ui.transitions.CircularReveal;
 import techgravy.nextstop.utils.CommonUtils;
 import techgravy.nextstop.utils.ImeUtils;
-import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.TransitionsUtil;
 import techgravy.nextstop.utils.logger.Logger;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SearchActivity extends Activity implements SearchContract.View {
 
@@ -136,7 +136,7 @@ public class SearchActivity extends Activity implements SearchContract.View {
         mSearchAdapter = new SearchResultsAdapter(SearchActivity.this, mResultsList);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mSearchRecyclerView.setLayoutManager(staggeredGridLayoutManager);
-        mSearchRecyclerView.addItemDecoration(new ItemOffsetDecoration(1));
+     //   mSearchRecyclerView.addItemDecoration(new ItemOffsetDecoration(1));
         mSearchRecyclerView.setAdapter(mSearchAdapter);
     }
 

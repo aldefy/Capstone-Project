@@ -6,7 +6,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-
+    <dimen name="widget_margin">8dp</dimen>
     <!-- standard metrics -->
     <dimen name="spacing_normal">8dp</dimen>
     <dimen name="spacing_micro">4dp</dimen>
@@ -55,5 +55,6 @@
 
     <!--Weather-->
     <dimen name="weather_icon">36dp</dimen>
+    <dimen name="text_50">50sp</dimen>
 
 </resources>

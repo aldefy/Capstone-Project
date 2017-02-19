@@ -57,7 +57,7 @@ public class SearchResults {
         int max = getSearchResultPhotosList().size();
         Random rand = new Random();
         SearchResultPhotos photo = getSearchResultPhotosList().get(rand.nextInt((max - min)));
-        return BuildConfig.GOOGLE_URL + "photo?maxwidth=" + "800"
+        return BuildConfig.GOOGLE_URL + "photo?maxwidth=" +(photo.getWidth().intValue())
                 + "&photoreference=" + photo.getPhoto_reference() + "&key=" + BuildConfig.GOOGLE_API_KEY;
     }
 

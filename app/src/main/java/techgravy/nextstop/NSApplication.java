@@ -1,5 +1,7 @@
 package techgravy.nextstop;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -13,7 +15,6 @@ import com.beltaief.reactivefb.util.PermissionHelper;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.bumptech.glide.Glide;
 import com.facebook.login.DefaultAudience;
-import com.google.firebase.database.FirebaseDatabase;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
@@ -21,11 +22,12 @@ import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 import techgravy.nextstop.ui.home.model.PlaceLatLng;
 import techgravy.nextstop.utils.PlacesLatLngConverter;
 import techgravy.nextstop.utils.logger.LoggerTree;
 import timber.log.Timber;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by aditlal on 13/12/16.
@@ -92,7 +94,7 @@ public class NSApplication extends MultiDexApplication {
         mNetComponent = DaggerNetComponent.builder()
                 // list of modules that are part of this component need to be created here too
                 .appModule(new AppModule(this)) // This also corresponds to the name of your module: %component_name%Module
-                .netModule(new NetModule(BuildConfig.GOOGLE_URL,BuildConfig.GOOGLE_API_KEY))
+                .netModule(new NetModule(BuildConfig.GOOGLE_URL, BuildConfig.GOOGLE_API_KEY))
                 .build();
 
 
@@ -145,4 +147,6 @@ public class NSApplication extends MultiDexApplication {
     public NetComponent getmNetComponent() {
         return mNetComponent;
     }
+
+
 }

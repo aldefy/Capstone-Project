@@ -53,9 +53,9 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         SearchResults results = mResultsList.get(position);
         if (results.getSearchResultPhotosList() != null && results.getSearchResultPhotosList().size() > 0) {
+            holder.mPlaceImageView.layout(0,0,0,0);
             Glide.with(mContext).load(results.generatePhotoUrl())
                     .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {

@@ -1,5 +1,7 @@
 package techgravy.nextstop.utils.logger;
 
+import android.content.Intent;
+
 public interface Printer {
 
     Printer t(String tag, int methodCount);
@@ -7,6 +9,8 @@ public interface Printer {
     Settings init(String tag);
 
     Settings getSettings();
+
+    void printIntent(Intent mIntent);
 
     void d(String message, Object... args);
 

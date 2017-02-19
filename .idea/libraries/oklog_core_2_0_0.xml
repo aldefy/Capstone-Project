@@ -4,8 +4,8 @@
       <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.simonpercic/oklog-core/2.0.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.simonpercic/oklog-core/2.0.0/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.simonpercic/oklog-core/2.0.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/c3b989cac00b070cdb175228775d29a042c44b5c/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/c3b989cac00b070cdb175228775d29a042c44b5c/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

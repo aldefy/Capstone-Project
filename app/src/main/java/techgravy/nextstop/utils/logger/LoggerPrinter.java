@@ -1,5 +1,6 @@
 package techgravy.nextstop.utils.logger;
 
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -96,6 +97,28 @@ final class LoggerPrinter implements Printer {
     @Override
     public Settings getSettings() {
         return settings;
+    }
+
+    @Override
+    public void printIntent(Intent mIntent) {
+            log(DEBUG,intentToString(mIntent));
+    }
+
+    public static String intentToString(Intent intent) {
+        if (intent == null)
+            return "";
+
+        StringBuilder stringBuilder = new StringBuilder("action: ")
+                .append(intent.getAction())
+                .append(" data: ")
+                .append(intent.getDataString())
+                .append(" extras: ")
+                ;
+        for (String key : intent.getExtras().keySet())
+            stringBuilder.append(key).append("=").append(intent.getExtras().get(key)).append(" ");
+
+        return stringBuilder.toString();
+
     }
 
     @Override

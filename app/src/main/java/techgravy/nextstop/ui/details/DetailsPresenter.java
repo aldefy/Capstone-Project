@@ -1,13 +1,14 @@
 package techgravy.nextstop.ui.details;
 
-import com.github.aurae.retrofit2.LoganSquareConverterFactory;
-import com.github.simonpercic.oklog3.OkLogInterceptor;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import com.github.aurae.retrofit2.LoganSquareConverterFactory;
+import com.github.simonpercic.oklog3.OkLogInterceptor;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.ArrayList;
@@ -197,7 +198,8 @@ class DetailsPresenter implements DetailsContract.Presenter {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-     /*   retrofit.create(GoogleApiInterface.class).textSearch("Attractions in "+ cityName)
+/*
+        retrofit.create(GoogleApiInterface.class).textSearch("Attractions in " + cityName)
                 .subscribeOn(Schedulers.io())
                 .map(SearchResponse::getResultsList)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -224,7 +226,8 @@ class DetailsPresenter implements DetailsContract.Presenter {
                     public void onComplete() {
                         Timber.tag("SearchResults").d("onComplete Called");
                     }
-                });*/
+                });
+*/
 
     }
 
