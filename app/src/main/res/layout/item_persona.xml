@@ -12,6 +12,6 @@
         android:layout_margin="@dimen/spacing_normal"
         android:background="@drawable/btn_persona_selector"
         android:textSize="@dimen/text_12"
-        tools:textSize="10sp"
-        tools:text="hola"/>
+        tools:textSize="12sp"
+        tools:text="hold"/>
 </LinearLayout>
