@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -36,6 +37,7 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
+import techgravy.nextstop.ui.WidgetProvider;
 import techgravy.nextstop.ui.home.HomeActivity;
 import timber.log.Timber;
 
@@ -127,14 +129,24 @@ public class BuildPersonaActivity extends AppCompatActivity implements PersonaGr
                 dataSnapshot.getRef().child(prefManager.getUUID()).child(getString(R.string.persona_tags)).setValue(userSelectionList);
                 //    database.child("users").child(prefManager.getUUID()).setValue(user);
                 startActivity(new Intent(BuildPersonaActivity.this, HomeActivity.class));
+                updateWidgetIfAny();
                 finish();
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Timber.tag(TAG).e(databaseError.getMessage());
             }
         });
+    }
+
+    private void updateWidgetIfAny() {
+        Intent intent = new Intent(BuildPersonaActivity.this, WidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {R.xml.app_widget};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 
     @Override

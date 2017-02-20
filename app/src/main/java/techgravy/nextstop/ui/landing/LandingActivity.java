@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -59,6 +60,7 @@ import techgravy.nextstop.base.PagerAdapter;
 import techgravy.nextstop.data.FacebookProfile;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.data.User;
+import techgravy.nextstop.ui.WidgetProvider;
 import techgravy.nextstop.ui.home.HomeActivity;
 import techgravy.nextstop.utils.Constants;
 import techgravy.nextstop.utils.ParallaxPagerTransformer;
@@ -301,6 +303,7 @@ public class LandingActivity extends AppCompatActivity {
                     else
                         startActivity(new Intent(LandingActivity.this, BuildPersonaActivity.class));
 
+                    updateWidgetIfAny();
                     finishAffinity();
                 }
                 progressDialog.dismiss();
@@ -313,6 +316,14 @@ public class LandingActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void updateWidgetIfAny() {
+        Intent intent = new Intent(LandingActivity.this, WidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = {R.xml.app_widget};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        sendBroadcast(intent);
     }
 
     @Override

@@ -133,6 +133,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
         Logger.t(TAG).printIntent(getIntent());
         if (intent.hasExtra(WIDGET_PLACE)) {
             Timber.tag(TAG).d(getString(R.string.place_load) + ((Places) getIntent().getParcelableExtra(WIDGET_PLACE)).place());
+            mPlaces = getIntent().getParcelableExtra(WIDGET_PLACE);
         } else if (intent.hasExtra(EXTRA_PLACE)) {
             mPlaces = getIntent().getParcelableExtra(EXTRA_PLACE);
             postponeEnterTransition();

@@ -2,7 +2,6 @@ package techgravy.nextstop.ui.home;
 
 import android.animation.Animator;
 import android.app.ActivityOptions;
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
@@ -60,7 +59,6 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import techgravy.nextstop.R;
 import techgravy.nextstop.data.SharedPrefManager;
-import techgravy.nextstop.ui.SimpleWidgetProvider;
 import techgravy.nextstop.ui.about.AboutActivity;
 import techgravy.nextstop.ui.details.DetailsCityActivity;
 import techgravy.nextstop.ui.home.model.Places;
@@ -108,7 +106,13 @@ public class HomeActivity extends AppCompatActivity
     Button mBtnApply;
     @BindView(R.id.btnSlideDown)
     Button mBtnSlideDown;
-
+    @BindColor(R.color.drawer_dark_bg)
+    int drawerBackground;
+    @BindColor(R.color.white)
+    int white;
+    @BindColor(R.color.accent)
+    int accent;
+    int x = 0, y = 0, hypotenuse;
     private HomeAdapter mHomeAdapter;
     private SharedPrefManager sharedPrefManager;
     private List<Places> mPlacesList;
@@ -121,12 +125,6 @@ public class HomeActivity extends AppCompatActivity
     private List<String> personaList;
     private List<PersonaTags> tagsList;
     private FilterAdapter mFilterAdapter;
-    @BindColor(R.color.drawer_dark_bg)
-    int drawerBackground;
-    @BindColor(R.color.white)
-    int white;
-    @BindColor(R.color.accent)
-    int accent;
     private ConnectivityManager.NetworkCallback connectivityCallback
             = new ConnectivityManager.NetworkCallback() {
         @Override
@@ -168,8 +166,6 @@ public class HomeActivity extends AppCompatActivity
                 .build().inject(HomeActivity.this);
         setupViews();
     }
-
-    int x = 0, y = 0, hypotenuse;
 
     private void setupViews() {
         setupToolbar();
@@ -403,17 +399,8 @@ public class HomeActivity extends AppCompatActivity
         mPlacesList.clear();
         mPlacesList.addAll(placesList);
         mHomeAdapter.notifyDataSetChanged();
-
-        updateWidgets();
     }
 
-    private void updateWidgets() {
-        Intent intent = new Intent(this, SimpleWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        int[] ids = {R.xml.app_widget};
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        sendBroadcast(intent);
-    }
 
     @Override
     public void filterPersonaTags(List<PersonaTags> personaTagsList) {
