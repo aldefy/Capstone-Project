@@ -1,68 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_250dp"
-    android:clickable="true"
-    android:foreground="@drawable/view_ripple"
-    android:orientation="vertical">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_250dp"
+        android:clickable="true"
+        android:foreground="@drawable/view_ripple"
+        android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/placeImageView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_250dp"
-        android:clickable="false"
-        android:scaleType="center"
-        android:transitionName="toolbarImage"
-        tools:src="@drawable/landing_3" android:contentDescription="@string/image"/>
+            android:id="@+id/placeImageView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_250dp"
+            android:clickable="false"
+            android:scaleType="center"
+            android:transitionName="toolbarImage"
+            tools:src="@drawable/landing_3"
+            android:contentDescription="@string/place"/>
 
     <View
-        android:id="@+id/rowScrim"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_250dp"
-        android:alpha="0.20"
-        android:clickable="false"/>
+            android:id="@+id/rowScrim"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_250dp"
+            android:alpha="0.20"
+            android:clickable="false"/>
 
     <View
-        android:id="@+id/dividerView"
-        android:layout_width="60dp"
-        android:layout_height="@dimen/divider_height"
-        android:layout_below="@+id/placeNameTextView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="@dimen/spacing_large"
-        android:layout_marginLeft="@dimen/spacing_large"
-        android:layout_marginRight="@dimen/spacing_large"
-        android:layout_marginStart="@dimen/spacing_large"
-        android:layout_marginTop="@dimen/spacing_normal"
-        android:background="@color/divider"/>
+            android:id="@+id/dividerView"
+            android:layout_width="60dp"
+            android:layout_height="@dimen/divider_height"
+            android:layout_below="@+id/placeNameTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="@dimen/spacing_large"
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_large"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:background="@color/divider"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/placeNickNameTextView"
-        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
-        fontPath="fonts/Lato-Hairline.otf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dividerView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginTop="@dimen/spacing_normal"
-        android:clickable="false"
-        android:maxLines="2"
-        android:textColor="@color/primary_text"
-        android:transitionName="toolbarTitle"
-        tools:text="@string/sample_sub"/>
+            android:id="@+id/placeNickNameTextView"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+            fontPath="fonts/Lato-Hairline.otf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dividerView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:clickable="false"
+            android:maxLines="2"
+            android:textColor="@color/primary_text"
+            android:transitionName="toolbarTitle"
+            tools:text="@string/sample_sub"/>
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/placeNameTextView"
-        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-        fontPath="fonts/Moderne-sans.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:clickable="false"
-        android:maxLines="2" android:transitionName="toolbarTitle"
-        tools:text="@string/sample"/>
+            android:id="@+id/placeNameTextView"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            fontPath="fonts/Moderne-sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            android:maxLines="2" android:transitionName="toolbarTitle"
+            tools:text="@string/sample"/>
 </RelativeLayout>

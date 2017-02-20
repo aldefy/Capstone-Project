@@ -96,6 +96,11 @@
     <string name="persona">persona</string>
     <string name="play_services_check">Update play services before you continue to use NextStop
     </string>
+    <string name="place">place</string>
+    <string name="leftNav">leftNav</string>
+    <string name="rightNav">rightnav</string>
+    <string name="connection_failure">connection failure</string>
+    <string name="container_image">container image</string>
 
 </resources>
 

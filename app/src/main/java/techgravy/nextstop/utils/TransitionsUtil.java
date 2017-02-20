@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionSet;
@@ -18,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import techgravy.nextstop.R;
-import techgravy.nextstop.ui.transitions.Recolor;
-import techgravy.nextstop.ui.transitions.TextSizeTransition;
 
 /**
  * Created by aditlal on 25/12/16.
@@ -39,33 +36,7 @@ public class TransitionsUtil {
         return fade;
     }
 
-    /**
-     * Returns a transition that will (1) move the shared element to its correct size
-     * and location on screen, (2) gradually increase/decrease the shared element's
-     * text size, and (3) gradually alters the shared element's text color through out
-     * the transition.
-     */
-    public static Transition makeSharedTextElementEnterTransition(View view, String text) {
-        TransitionSet set = new TransitionSet();
-        set.setOrdering(TransitionSet.ORDERING_TOGETHER);
 
-        Transition recolor = new Recolor();
-        recolor.addTarget(view);
-        recolor.addTarget(text);
-        set.addTransition(recolor);
-
-        Transition changeBounds = new ChangeBounds();
-        changeBounds.addTarget(view);
-        changeBounds.addTarget(text);
-        set.addTransition(changeBounds);
-
-        Transition textSize = new TextSizeTransition();
-        textSize.addTarget(view);
-        textSize.addTarget(text);
-        set.addTransition(textSize);
-
-        return set;
-    }
 
 
 

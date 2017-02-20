@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:clickable="false"
-        android:contentDescription="@string/image"
+        android:contentDescription="@string/place"
         android:maxHeight="150dp"
         android:scaleType="center"
         android:transitionName="toolbarImage"

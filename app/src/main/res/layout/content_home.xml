@@ -32,6 +32,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/connection_failure"
             android:layout_centerInParent="true"
             android:paddingBottom="?android:actionBarSize"
             android:src="@drawable/no_connection"
