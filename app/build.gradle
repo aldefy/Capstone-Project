@@ -6,7 +6,7 @@ android {
         release {
             keyAlias 'NextStop'
             keyPassword 'VJZkRD'
-            storeFile file('/Users/aditlal/Documents/GitProj/Nanodegree/Capstone-Project/nextstop.jks')
+            storeFile file('$rootdir/nextstop.jks')
             storePassword 'VJZkRD'
         }
     }

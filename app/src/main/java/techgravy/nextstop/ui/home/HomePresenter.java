@@ -174,8 +174,8 @@ class HomePresenter implements HomeContract.Presenter {
         });
     }
 
-    private String toTitle (String s) {
-        String s1 = s.substring(0,1).toUpperCase();
+    private String toTitle(String s) {
+        String s1 = s.substring(0, 1).toUpperCase();
         String sTitle = s1 + s.substring(1);
         return sTitle;
     }
@@ -281,7 +281,15 @@ class HomePresenter implements HomeContract.Presenter {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
-                    userSelectionList.addAll(user.getPersonaTagsList());
+                    if (user.getPersonaTagsList() != null)
+                        userSelectionList.addAll(user.getPersonaTagsList());
+                    else {
+                        List<PersonaTags> personaTagList = new ArrayList<>();
+                        personaTagList.add(new PersonaTags("Family"));
+                        personaTagList.add(new PersonaTags("Adventure"));
+                        personaTagList.add(new PersonaTags("Cityscape"));
+                        userSelectionList.addAll(personaTagList);
+                    }
                     mHomeView.filterPersonaTags(user.getPersonaTagsList());
                     Timber.tag(TAG).d(user.toString());
                 }

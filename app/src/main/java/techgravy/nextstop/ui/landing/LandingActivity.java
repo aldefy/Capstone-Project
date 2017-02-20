@@ -1,5 +1,19 @@
 package techgravy.nextstop.ui.landing;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -21,19 +35,11 @@ import com.bluelinelabs.logansquare.LoganSquare;
 import com.facebook.AccessToken;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.jakewharton.rxbinding.view.RxView;
 
 import org.json.JSONException;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +62,6 @@ import techgravy.nextstop.data.User;
 import techgravy.nextstop.ui.home.HomeActivity;
 import techgravy.nextstop.utils.ParallaxPagerTransformer;
 import timber.log.Timber;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static timber.log.Timber.tag;
 
@@ -121,6 +126,7 @@ public class LandingActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(LandingActivity.this);
         progressDialog.setMessage("Authenticating..");
         fragmentList = new ArrayList<>();
+        checkPlayServices(LandingActivity.this);
         GettingStartedFragment page1 = GettingStartedFragment.newInstance(0);
         GettingStartedFragment page2 = GettingStartedFragment.newInstance(1);
         GettingStartedFragment page3 = GettingStartedFragment.newInstance(2);
@@ -330,5 +336,22 @@ public class LandingActivity extends AppCompatActivity {
             });
 
         }
+    }
+
+
+    public boolean checkPlayServices(Context context) {
+        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int resultCode = api.isGooglePlayServicesAvailable(context);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (api.isUserResolvableError(resultCode))
+                api.getErrorDialog(((Activity) context), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            else {
+                Toast.makeText(context, R.string.play_services_check, Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }
