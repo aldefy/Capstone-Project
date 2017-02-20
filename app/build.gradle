@@ -7,7 +7,7 @@ android {
         release {
             keyAlias 'NextStop'
             keyPassword 'VJZkRD'
-            storeFile file('$rootdir/nextstop.jks')
+            storeFile file("release/nextstop.jks")
             storePassword 'VJZkRD'
         }
     }
