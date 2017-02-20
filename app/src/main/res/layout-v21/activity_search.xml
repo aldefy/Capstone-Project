@@ -69,7 +69,7 @@
                     android:id="@+id/searchback"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="?android:selectableItemBackground"
+                    android:background="?android:selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_arrow_back_padded"
                     android:transitionName="@string/transition_search_back"/>
 

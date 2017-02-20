@@ -17,6 +17,7 @@ android {
          preDexLibraries true
      }*/
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "techgravy.nextstop"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
