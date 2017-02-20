@@ -3,6 +3,8 @@ package techgravy.nextstop.data;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
+import techgravy.nextstop.utils.Constants;
+
 /**
  * Created by aditlal on 17/12/16 - 17.
  */
@@ -21,6 +23,6 @@ public class FacebookPicture {
 
     @Override
     public String toString() {
-        return "ClassPojo [data = " + data + "]";
+        return Constants.CLASS_POJO + " [data = " + data + "]";
     }
 }

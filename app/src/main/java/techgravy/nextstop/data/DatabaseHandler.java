@@ -9,10 +9,10 @@ import static techgravy.nextstop.data.DatabaseContract.TABLE_SEARCH;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "nextstop.db";
+    private static final String DATABASE_NAME = "nextstop.db";  // cant be saved to strings , context prob
     private static final int DATABASE_VERSION = 1;
     private static final String SQL_CREATE_TABLE_SEARCH = String.format("create table %s"
-                    + " (%s text primary key, %s text)",
+                    + " (%s text primary key, %s text)", // cant be saved to strings , context prob
             TABLE_SEARCH,
             SearchColumns.KEY_ID,
             SearchColumns.KEY_NAME

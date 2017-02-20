@@ -67,6 +67,7 @@ import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.ui.landing.PersonaTags;
 import techgravy.nextstop.ui.search.SearchActivity;
 import techgravy.nextstop.utils.AnimUtils;
+import techgravy.nextstop.utils.Constants;
 import techgravy.nextstop.utils.ItemOffsetDecoration;
 import techgravy.nextstop.utils.SimpleDividerItemDecoration;
 import timber.log.Timber;
@@ -76,7 +77,7 @@ public class HomeActivity extends AppCompatActivity
         implements HomeContract.View, HomeAdapter.PlaceAdapterClickInterface, FilterAdapter.PersonaInterface {
 
     private static final int RC_SEARCH = 0;
-    private static final String TAG = "HOME";
+    private static final String TAG = "HOME"; // cant be saved to strings , context prob
     private static final int REQUEST_PLACE = 523; //Request code , random
     @BindView(android.R.id.empty)
     ProgressBar mLoading;
@@ -210,23 +211,24 @@ public class HomeActivity extends AppCompatActivity
         tagsList = new ArrayList<>();
         userPersonaMap = new HashMap<>();
         personaList = new ArrayList<>();
-        tagsList.add(new PersonaTags("Family"));
-        tagsList.add(new PersonaTags("Entertainment"));
-        tagsList.add(new PersonaTags("Shopping"));
-        tagsList.add(new PersonaTags("Sun"));
-        tagsList.add(new PersonaTags("Adventure"));
-        tagsList.add(new PersonaTags("Landmarks"));
-        tagsList.add(new PersonaTags("Sports"));
-        tagsList.add(new PersonaTags("Nightlife"));
-        tagsList.add(new PersonaTags("Food"));
-        tagsList.add(new PersonaTags("Cityscape"));
-        tagsList.add(new PersonaTags("History"));
-        tagsList.add(new PersonaTags("Picturesque"));
-        tagsList.add(new PersonaTags("Beaches"));
-        tagsList.add(new PersonaTags("Islands"));
-        tagsList.add(new PersonaTags("Romantic"));
-        tagsList.add(new PersonaTags("Art"));
-        tagsList.add(new PersonaTags("Luxury"));
+        tagsList.add(new PersonaTags(Constants.FAMILY));
+        tagsList.add(new PersonaTags(Constants.ENTERTAINMENT));
+        tagsList.add(new PersonaTags(Constants.SHOPPING));
+        tagsList.add(new PersonaTags(Constants.SUN));
+        tagsList.add(new PersonaTags(Constants.ADVENTURE));
+        tagsList.add(new PersonaTags(Constants.LANDMARKS));
+        tagsList.add(new PersonaTags(Constants.WATER_SPORTS));
+        tagsList.add(new PersonaTags(Constants.SPORTS));
+        tagsList.add(new PersonaTags(Constants.NIGHT_LIFE));
+        tagsList.add(new PersonaTags(Constants.FOOD));
+        tagsList.add(new PersonaTags(Constants.CITYSCAPE));
+        tagsList.add(new PersonaTags(Constants.HISTORY));
+        tagsList.add(new PersonaTags(Constants.PICTURESQUE));
+        tagsList.add(new PersonaTags(Constants.BEACHES));
+        tagsList.add(new PersonaTags(Constants.ISLAND));
+        tagsList.add(new PersonaTags(Constants.ROMANTIC));
+        tagsList.add(new PersonaTags(Constants.ART));
+        tagsList.add(new PersonaTags(Constants.LUXURY));
 
         x = mSlideView.getRight();
         y = mSlideView.getBottom();
@@ -390,7 +392,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void attachUserPlaces(List<Places> placesList) {
         for (Places places : placesList) {
-            Timber.tag(TAG).d("places  =" + places.printNames());
+            Timber.tag(TAG).d(places.printNames());
         }
         mPlacesList.addAll(placesList);
         mHomeAdapter.notifyDataSetChanged();

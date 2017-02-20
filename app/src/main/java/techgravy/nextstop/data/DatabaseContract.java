@@ -6,23 +6,23 @@ import android.provider.BaseColumns;
 
 public class DatabaseContract {
     //Database schema information
-    public static final String TABLE_SEARCH = "search";
+    static final String TABLE_SEARCH = "search";  // cant be saved to strings , context prob
 
     public static final class SearchColumns implements BaseColumns {
         //Task description
-        public static final String KEY_ID = "id";
-        public static final String KEY_NAME = "name";
+        public static final String KEY_ID = "id";  // cant be saved to strings , context prob
+        public static final String KEY_NAME = "name";  // cant be saved to strings , context prob
 
     }
 
     //Unique authority string for the content provider
-    public static final String CONTENT_AUTHORITY = "nextstop.authority";
+    static final String CONTENT_AUTHORITY = "nextstop.authority";  // cant be saved to strings , context prob
 
     //Alphabetically arranged
-    public static final String ALPHA_SORT = String.format("%s COLLATE NOCASE", SearchColumns.KEY_NAME);
+    public static final String ALPHA_SORT = String.format("%s COLLATE NOCASE", SearchColumns.KEY_NAME);   // cant be saved to strings , context prob
 
     //Base content Uri for accessing the provider
-    public static final Uri CONTENT_URI = new Uri.Builder().scheme("content")
+    public static final Uri CONTENT_URI = new Uri.Builder().scheme("content")   // cant be saved to strings , context prob
             .authority(CONTENT_AUTHORITY)
             .appendPath(TABLE_SEARCH)
             .build();

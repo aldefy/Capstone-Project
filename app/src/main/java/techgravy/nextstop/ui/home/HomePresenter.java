@@ -21,6 +21,7 @@ import techgravy.nextstop.data.User;
 import techgravy.nextstop.ui.home.model.AutoJson_Places;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.ui.landing.PersonaTags;
+import techgravy.nextstop.utils.Constants;
 import techgravy.nextstop.utils.FirebaseJSONUtil;
 import timber.log.Timber;
 
@@ -29,7 +30,8 @@ import timber.log.Timber;
  */
 
 class HomePresenter implements HomeContract.Presenter {
-    public final String TAG = "HomePresenter";
+    public static final String PLACES = "places";
+    public final String TAG = "HomePresenter"; // cant be saved to strings , context prob
     private HomeContract.View mHomeView;
     private DatabaseReference mDatabaseReference;
     private SharedPrefManager mSharedPrefManager;
@@ -63,72 +65,76 @@ class HomePresenter implements HomeContract.Presenter {
                 Places places = iterator.next();
                 for (String tags : personaList)
                     switch (tags) {
-                        case "Family":
-                            if (places.family().equalsIgnoreCase("true"))
+                        case Constants.FAMILY:
+                            if (places.family().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Entertainment":
-                            if (places.entertainment().equalsIgnoreCase("true"))
+                        case Constants.ENTERTAINMENT:
+                            if (places.entertainment().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Shopping":
-                            if (places.shopping().equalsIgnoreCase("true"))
+                        case Constants.SHOPPING:
+                            if (places.shopping().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Sun":
-                            if (places.sun().equalsIgnoreCase("true"))
+                        case Constants.SUN:
+                            if (places.sun().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Adventure":
-                            if (places.adventure().equalsIgnoreCase("true"))
+                        case Constants.ADVENTURE:
+                            if (places.adventure().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Landmarks":
-                            if (places.landmarks().equalsIgnoreCase("true"))
+                        case Constants.LANDMARKS:
+                            if (places.landmarks().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Sports":
-                            if (places.sports().equalsIgnoreCase("true"))
+                        case Constants.WATER_SPORTS:
+                            if (places.sports().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Nightlife":
-                            if (places.nightlife().equalsIgnoreCase("true"))
+                        case Constants.SPORTS:
+                            if (places.sports().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Food":
-                            if (places.food().equalsIgnoreCase("true"))
+                        case Constants.NIGHT_LIFE:
+                            if (places.nightlife().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Cityscape":
-                            if (places.cityscape().equalsIgnoreCase("true"))
+                        case Constants.FOOD:
+                            if (places.food().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "History":
-                            if (places.history().equalsIgnoreCase("true"))
+                        case Constants.CITYSCAPE:
+                            if (places.cityscape().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Picturesque":
-                            if (places.picturesque().equalsIgnoreCase("true"))
+                        case Constants.HISTORY:
+                            if (places.history().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Beaches":
-                            if (places.beaches().equalsIgnoreCase("true"))
+                        case Constants.PICTURESQUE:
+                            if (places.picturesque().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Islands":
-                            if (places.island().equalsIgnoreCase("true"))
+                        case Constants.BEACHES:
+                            if (places.beaches().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Romantic":
-                            if (places.romantic().equalsIgnoreCase("true"))
+                        case Constants.ISLAND:
+                            if (places.island().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Art":
-                            if (places.art().equalsIgnoreCase("true"))
+                        case Constants.ROMANTIC:
+                            if (places.romantic().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Luxury":
-                            if (places.luxury().equalsIgnoreCase("true"))
+                        case Constants.ART:
+                            if (places.art().equalsIgnoreCase(Constants.TRUE))
+                                resultMap.put(places.place(), places);
+                            break;
+                        case Constants.LUXURY:
+                            if (places.luxury().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
 
@@ -146,7 +152,7 @@ class HomePresenter implements HomeContract.Presenter {
     @Override
     public void fetchUserPlaces() {
         mHomeView.showProgress();
-        Query query = mDatabaseReference.child("places");
+        Query query = mDatabaseReference.child(PLACES);
         query.keepSynced(true);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,8 +182,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     private String toTitle(String s) {
         String s1 = s.substring(0, 1).toUpperCase();
-        String sTitle = s1 + s.substring(1);
-        return sTitle;
+        return s1 + s.substring(1);
     }
 
     private void computeUserSelectionPlaces(List<Places> placesList) {
@@ -191,72 +196,72 @@ class HomePresenter implements HomeContract.Presenter {
                 Places places = iterator.next();
                 for (String tags : personaList)
                     switch (tags) {
-                        case "Family":
-                            if (places.family().equalsIgnoreCase("true"))
+                        case Constants.FAMILY:
+                            if (places.family().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Entertainment":
-                            if (places.entertainment().equalsIgnoreCase("true"))
+                        case Constants.ENTERTAINMENT:
+                            if (places.entertainment().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Shopping":
-                            if (places.shopping().equalsIgnoreCase("true"))
+                        case Constants.SHOPPING:
+                            if (places.shopping().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Sun":
-                            if (places.sun().equalsIgnoreCase("true"))
+                        case Constants.SUN:
+                            if (places.sun().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Adventure":
-                            if (places.adventure().equalsIgnoreCase("true"))
+                        case Constants.ADVENTURE:
+                            if (places.adventure().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Landmarks":
-                            if (places.landmarks().equalsIgnoreCase("true"))
+                        case Constants.LANDMARKS:
+                            if (places.landmarks().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Sports":
-                            if (places.sports().equalsIgnoreCase("true"))
+                        case Constants.SPORTS:
+                            if (places.sports().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Nightlife":
-                            if (places.nightlife().equalsIgnoreCase("true"))
+                        case Constants.NIGHT_LIFE:
+                            if (places.nightlife().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Food":
-                            if (places.food().equalsIgnoreCase("true"))
+                        case Constants.FOOD:
+                            if (places.food().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Cityscape":
-                            if (places.cityscape().equalsIgnoreCase("true"))
+                        case Constants.CITYSCAPE:
+                            if (places.cityscape().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "History":
-                            if (places.history().equalsIgnoreCase("true"))
+                        case Constants.HISTORY:
+                            if (places.history().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Picturesque":
-                            if (places.picturesque().equalsIgnoreCase("true"))
+                        case Constants.PICTURESQUE:
+                            if (places.picturesque().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Beaches":
-                            if (places.beaches().equalsIgnoreCase("true"))
+                        case Constants.BEACHES:
+                            if (places.beaches().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Islands":
-                            if (places.island().equalsIgnoreCase("true"))
+                        case Constants.ISLAND:
+                            if (places.island().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Romantic":
-                            if (places.romantic().equalsIgnoreCase("true"))
+                        case Constants.ROMANTIC:
+                            if (places.romantic().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Art":
-                            if (places.art().equalsIgnoreCase("true"))
+                        case Constants.ART:
+                            if (places.art().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
-                        case "Luxury":
-                            if (places.luxury().equalsIgnoreCase("true"))
+                        case Constants.LUXURY:
+                            if (places.luxury().equalsIgnoreCase(Constants.TRUE))
                                 resultMap.put(places.place(), places);
                             break;
 
@@ -273,7 +278,7 @@ class HomePresenter implements HomeContract.Presenter {
 
     @Override
     public void fetchUserPersonaTags() {
-        Query query = mDatabaseReference.child("users").orderByChild(mSharedPrefManager.getUUID());
+        Query query = mDatabaseReference.child(Constants.USERS).orderByChild(mSharedPrefManager.getUUID());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -285,9 +290,9 @@ class HomePresenter implements HomeContract.Presenter {
                         userSelectionList.addAll(user.getPersonaTagsList());
                     else {
                         List<PersonaTags> personaTagList = new ArrayList<>();
-                        personaTagList.add(new PersonaTags("Family"));
-                        personaTagList.add(new PersonaTags("Adventure"));
-                        personaTagList.add(new PersonaTags("Cityscape"));
+                        personaTagList.add(new PersonaTags(Constants.FAMILY));
+                        personaTagList.add(new PersonaTags(Constants.ADVENTURE));
+                        personaTagList.add(new PersonaTags(Constants.SHOPPING));
                         userSelectionList.addAll(personaTagList);
                     }
                     mHomeView.filterPersonaTags(user.getPersonaTagsList());

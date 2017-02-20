@@ -30,14 +30,31 @@ import techgravy.nextstop.ui.details.model.AutoJson_POI;
 import techgravy.nextstop.ui.details.model.POI;
 import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
+import techgravy.nextstop.utils.Constants;
 import techgravy.nextstop.utils.FirebaseJSONUtil;
 import timber.log.Timber;
+
+import static techgravy.nextstop.utils.Constants.ADVENTURE;
+import static techgravy.nextstop.utils.Constants.CITYSCAPE;
+import static techgravy.nextstop.utils.Constants.ENTERTAINMENT;
+import static techgravy.nextstop.utils.Constants.FAMILY;
+import static techgravy.nextstop.utils.Constants.FOOD;
+import static techgravy.nextstop.utils.Constants.LANDMARKS;
+import static techgravy.nextstop.utils.Constants.LUXURY;
+import static techgravy.nextstop.utils.Constants.METRIC;
+import static techgravy.nextstop.utils.Constants.NIGHT_LIFE;
+import static techgravy.nextstop.utils.Constants.SHOPPING;
+import static techgravy.nextstop.utils.Constants.SPORTS;
+import static techgravy.nextstop.utils.Constants.SUN;
+import static techgravy.nextstop.utils.Constants.TRUE;
 
 /**
  * Created by aditlal on 12/01/17 - 12.
  */
 
 class DetailsPresenter implements DetailsContract.Presenter {
+    public static final String WEATHER_TAG = "WeatherTAG";
+    public static final String POI = "POI";
     private CompositeDisposable mCompositeDisposable;
     private DetailsContract.View mView;
     public Retrofit retrofit;
@@ -59,41 +76,41 @@ class DetailsPresenter implements DetailsContract.Presenter {
                 .subscribeOn(Schedulers.computation())
                 .map(places1 -> {
                     List<String> returnTags = new ArrayList<>();
-                    if (places.family().equals("true"))
-                        returnTags.add("Family");
-                    if (places.entertainment().equals("true"))
-                        returnTags.add("Entertainment");
-                    if (places.sun().equals("true"))
-                        returnTags.add("Sun");
-                    if (places.adventure().equals("true"))
-                        returnTags.add("Adventure");
+                    if (places.family().equals(TRUE))
+                        returnTags.add(FAMILY);
+                    if (places.entertainment().equals(TRUE))
+                        returnTags.add(ENTERTAINMENT);
+                    if (places.sun().equals(TRUE))
+                        returnTags.add(SUN);
+                    if (places.adventure().equals(TRUE))
+                        returnTags.add(ADVENTURE);
 
-                    if (places.landmarks().equals("true"))
-                        returnTags.add("Landmarks");
-                    if (places.sports().equals("true"))
-                        returnTags.add("Water Sports");
-                    if (places.nightlife().equals("true"))
-                        returnTags.add("Night Life");
-                    if (places.food().equals("true"))
-                        returnTags.add("Food");
-                    if (places.shopping().equals("true"))
-                        returnTags.add("Shopping");
-                    if (places.luxury().equals("true"))
-                        returnTags.add("Luxury");
-                    if (places.cityscape().equals("true"))
-                        returnTags.add("Cityscape");
-                    if (places.history().equals("true"))
-                        returnTags.add("History");
-                    if (places.picturesque().equals("true"))
-                        returnTags.add("Picturesque");
-                    if (places.beaches().equals("true"))
-                        returnTags.add("Beaches");
-                    if (places.island().equals("true"))
-                        returnTags.add("Island");
-                    if (places.romantic().equals("true"))
-                        returnTags.add("Romantic");
-                    if (places.art().equals("true"))
-                        returnTags.add("Art");
+                    if (places.landmarks().equals(TRUE))
+                        returnTags.add(LANDMARKS);
+                    if (places.sports().equals(TRUE))
+                        returnTags.add(SPORTS);
+                    if (places.nightlife().equals(TRUE))
+                        returnTags.add(NIGHT_LIFE);
+                    if (places.food().equals(TRUE))
+                        returnTags.add(FOOD);
+                    if (places.shopping().equals(TRUE))
+                        returnTags.add(SHOPPING);
+                    if (places.luxury().equals(TRUE))
+                        returnTags.add(LUXURY);
+                    if (places.cityscape().equals(TRUE))
+                        returnTags.add(CITYSCAPE);
+                    if (places.history().equals(TRUE))
+                        returnTags.add(Constants.HISTORY);
+                    if (places.picturesque().equals(TRUE))
+                        returnTags.add(Constants.PICTURESQUE);
+                    if (places.beaches().equals(TRUE))
+                        returnTags.add(Constants.BEACHES);
+                    if (places.island().equals(TRUE))
+                        returnTags.add(Constants.ISLAND);
+                    if (places.romantic().equals(TRUE))
+                        returnTags.add(Constants.ROMANTIC);
+                    if (places.art().equals(TRUE))
+                        returnTags.add(Constants.ART);
                     Collections.sort(returnTags);
                     return returnTags;
                 })
@@ -126,7 +143,7 @@ class DetailsPresenter implements DetailsContract.Presenter {
         OkLogInterceptor okLogInterceptor =
                 OkLogInterceptor.builder()
                         .setLogInterceptor(url -> {
-                            Timber.tag("API_TAG").d(url);
+                            Timber.tag(WEATHER_TAG).d(url);
                             return true;
                         }).withAllLogData().build();
         OkHttpClient.Builder client = new OkHttpClient.Builder();
@@ -138,7 +155,7 @@ class DetailsPresenter implements DetailsContract.Presenter {
                 .client(client.build())
                 .build();
         weatherRetrofit.create(WeatherApi.class)
-                .getTodaysForecast(cityName, BuildConfig.WEATHER_API_KEY, "metric")
+                .getTodaysForecast(cityName, BuildConfig.WEATHER_API_KEY, METRIC)
                 .subscribeOn(Schedulers.io())
                 .map(weatherResponse ->
                         WeatherModel.builder()
@@ -160,7 +177,7 @@ class DetailsPresenter implements DetailsContract.Presenter {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
                     }
 
                     @Override
@@ -174,7 +191,7 @@ class DetailsPresenter implements DetailsContract.Presenter {
 
     @Override
     public void getPOI(String cityName) {
-        Query query = mDatabaseReference.child("place_details").child(cityName);
+        Query query = mDatabaseReference.child(Constants.PLACE_DETAILS).child(cityName);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -183,7 +200,7 @@ class DetailsPresenter implements DetailsContract.Presenter {
                         List<POI> results = new ArrayList<>();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             POI poi = FirebaseJSONUtil.deserialize(snapshot, AutoJson_POI.class);
-                            Timber.tag("POI").d(poi.place());
+                            Timber.tag(POI).d(poi.place());
                             results.add(poi);
                         }
                         mView.loadSearchResults(results);

@@ -34,6 +34,7 @@ import timber.log.Timber;
  */
 
 public class NSApplication extends MultiDexApplication {
+    public static final String CUSTOM_URL_ITEM = "customUrlItem";
     private NetComponent mNetComponent;
     public static NSApplication mNSApplication;
 
@@ -103,7 +104,7 @@ public class NSApplication extends MultiDexApplication {
          */
         if (BuildConfig.DEBUG) {
             Timber.plant(new LoggerTree());
-            Timber.tag("NextStop");
+            Timber.tag(getString(R.string.app_name));
         }
 
         /*
@@ -132,7 +133,7 @@ public class NSApplication extends MultiDexApplication {
                     return DrawerUIUtils.getPlaceHolder(ctx);
                 } else if (DrawerImageLoader.Tags.ACCOUNT_HEADER.name().equals(tag)) {
                     return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(R.color.primary).sizeDp(56);
-                } else if ("customUrlItem".equals(tag)) {
+                } else if (CUSTOM_URL_ITEM.equals(tag)) {
                     return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(R.color.md_red_500).sizeDp(56);
                 }
 

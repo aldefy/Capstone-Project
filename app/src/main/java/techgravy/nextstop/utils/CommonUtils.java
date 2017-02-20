@@ -23,8 +23,12 @@ import timber.log.Timber;
 
 public class CommonUtils {
 
+    public static final String ADDRESS_GEO_CODE = "AddressGeoCode";   // cant be saved to strings , context prob
+    public static final String CURRENT_LOCAL_ADDRESS = "My Current loction address";  // cant be saved to strings , context prob
+    public static final String NO_ADDRESS = "No Address returned!";  // cant be saved to strings , context prob
+    public static final String CANNOT_FIND_ADDRESS = "Canont get Address!";  // cant be saved to strings , context prob
     public static DecimalFormat df = new DecimalFormat("#");
-    public static final String TIME_FORMAT = "yyyyMMddHHmmss";
+    public static final String TIME_FORMAT = "yyyyMMddHHmmss"; // cant be saved to strings , context prob
     // Ex : 20161001214120
     private static DateTimeFormatter formatter = DateTimeFormat.forPattern(TIME_FORMAT);
     private final static AtomicInteger c = new AtomicInteger(0);
@@ -46,11 +50,11 @@ public class CommonUtils {
 
     public static String formatDate(DateTime modelDateTime, DateTime today, DateTime yesterday) {
         if (modelDateTime.toLocalDate().equals(today.toLocalDate())) {
-            return "Today\n" + modelDateTime.toString("MM/dd");
+            return "Today\n" + modelDateTime.toString("MM/dd"); // cant be saved to strings , context prob
         } else if (modelDateTime.toLocalDate().equals(yesterday.toLocalDate())) {
-            return "Yest \n" + modelDateTime.toString("MM/dd");
+            return "Yest \n" + modelDateTime.toString("MM/dd"); // cant be saved to strings , context prob
         } else {
-            return modelDateTime.toString("MM/dd");
+            return modelDateTime.toString("MM/dd"); // cant be saved to strings , context prob
         }
     }
 
@@ -62,7 +66,7 @@ public class CommonUtils {
             for (String s : children) {
                 if (!s.equals("lib")) {
                     deleteDir(new File(appDir, s));
-                    Timber.tag("TAG").i("**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
+                    Timber.tag(CommonUtils.class.getSimpleName()).i("**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
                 }
             }
         }
@@ -95,13 +99,13 @@ public class CommonUtils {
                     strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                 }
                 strAdd = strReturnedAddress.toString();
-                Timber.tag("AddressGeoCode").w("My Current loction address", "" + strReturnedAddress.toString());
+                Timber.tag(ADDRESS_GEO_CODE).w(CURRENT_LOCAL_ADDRESS, "" + strReturnedAddress.toString());
             } else {
-                Timber.tag("AddressGeoCode").w("My Current loction address", "No Address returned!");
+                Timber.tag(ADDRESS_GEO_CODE).w(CURRENT_LOCAL_ADDRESS, NO_ADDRESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Timber.tag("AddressGeoCode").w("My Current loction address", "Canont get Address!");
+            Timber.tag(ADDRESS_GEO_CODE).w(CURRENT_LOCAL_ADDRESS, CANNOT_FIND_ADDRESS);
         }
         return strAdd;
     }

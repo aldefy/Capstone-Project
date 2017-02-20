@@ -50,6 +50,9 @@ import techgravy.nextstop.ui.details.model.WeatherModel;
 import techgravy.nextstop.ui.home.model.Places;
 import techgravy.nextstop.utils.WeatherUtils;
 import techgravy.nextstop.utils.logger.Logger;
+import timber.log.Timber;
+
+import static techgravy.nextstop.utils.Constants.METRIC;
 
 /**
  * Created by aditlal on 25/12/16.
@@ -57,6 +60,8 @@ import techgravy.nextstop.utils.logger.Logger;
 
 public class DetailsCityActivity extends AppCompatActivity implements DetailsContract.View {
 
+    public static final String TOOLBAR_TITLE = "toolbarTitle"; // cant be saved to strings , context prob
+    public static final String TAG = "DetailsCity";  // cant be saved to strings , context prob
     @BindView(R.id.placeImageView)
     ImageView mPlaceImageView;
     @BindView(R.id.toolbar)
@@ -89,9 +94,9 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
     int dark;
 
     private Places mPlaces;
-    public final static String EXTRA_PLACE = "EXTRA_PLACE";
-    public final static String WIDGET_PLACE = "WIDGET_PLACE";
-    public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";
+    public final static String EXTRA_PLACE = "EXTRA_PLACE"; // cant be saved to strings , context prob
+    public final static String WIDGET_PLACE = "WIDGET_PLACE"; // cant be saved to strings , context prob
+    public final static String RESULT_EXTRA_PLACES_ID = "RESULT_EXTRA_PLACES_ID";// cant be saved to strings , context prob
     private List<String> mTagsList;
     private List<POI> mSearchResultsList;
     private TagRVAdapter mTagRVAdapter;
@@ -123,11 +128,11 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
     }
 
     private void initViews() {
-        mPlaceNameTextView.setTransitionName("toolbarTitle");
+        mPlaceNameTextView.setTransitionName(TOOLBAR_TITLE);
         Intent intent = getIntent();
-        Logger.t("intent").printIntent(getIntent());
+        Logger.t(TAG).printIntent(getIntent());
         if (intent.hasExtra(WIDGET_PLACE)) {
-            Logger.t("PlaceWidget").d("Place to be loaded =" + ((Places) getIntent().getParcelableExtra(WIDGET_PLACE)).place());
+            Timber.tag(TAG).d(getString(R.string.place_load) + ((Places) getIntent().getParcelableExtra(WIDGET_PLACE)).place());
         } else if (intent.hasExtra(EXTRA_PLACE)) {
             mPlaces = getIntent().getParcelableExtra(EXTRA_PLACE);
             postponeEnterTransition();
@@ -135,7 +140,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
             finish();
         }
 
-        Logger.t("PlaceDetail").d(mPlaces.place());
+        Logger.t(TAG).d(mPlaces.place());
         setupToolBar();
         mAppBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> shouldScroll = Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange());
         mScrollContent.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -245,7 +250,7 @@ public class DetailsCityActivity extends AppCompatActivity implements DetailsCon
 
     @Override
     public void loadWeather(WeatherModel model) {
-        mTvWeather.setText(WeatherUtils.formatTemperature(DetailsCityActivity.this, model.temp(), "Metric"));
+        mTvWeather.setText(WeatherUtils.formatTemperature(DetailsCityActivity.this, model.temp(), METRIC));
         mIvWeatherIcon.setImageDrawable(WeatherUtils.getWeatherIconFromWeather(DetailsCityActivity.this, model.weatherID(), WeatherUtils.ICON_PACK_METEOCONCS));
     }
 

@@ -26,12 +26,14 @@ import timber.log.Timber;
  * Created by aditlal on 27/12/16.
  */
 
-public class DetailsPOIRVAdapter extends RecyclerView.Adapter<DetailsPOIRVAdapter.ViewHolder> {
+class DetailsPOIRVAdapter extends RecyclerView.Adapter<DetailsPOIRVAdapter.ViewHolder> {
+    private static final String IS_LOADING = " is loading";
     private final LayoutInflater layoutInflater;
     private Context mContext;
-    List<POI> mResultsList;
+    private static final String TAG = "DetailsPOVAdapter"; // cant be saved to strings , context prob
+    private List<POI> mResultsList;
 
-    public DetailsPOIRVAdapter(Context context, List<POI> resultsList) {
+    DetailsPOIRVAdapter(Context context, List<POI> resultsList) {
         this.layoutInflater = LayoutInflater.from(context);
         mContext = context;
         mResultsList = resultsList;
@@ -59,13 +61,13 @@ public class DetailsPOIRVAdapter extends RecyclerView.Adapter<DetailsPOIRVAdapte
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        Timber.tag("Glide").d(mContext.getString(R.string.log_error), model, e.getMessage());
+                        Timber.tag(TAG).d(mContext.getString(R.string.log_error), model, e.getMessage());
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        Timber.tag("Glide").d(mContext.getString(R.string.log_error), model, " is Loading");
+                        Timber.tag(TAG).d(mContext.getString(R.string.log_error), model, IS_LOADING);
                         return false;
                     }
                 })

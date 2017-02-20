@@ -60,6 +60,7 @@ import techgravy.nextstop.data.FacebookProfile;
 import techgravy.nextstop.data.SharedPrefManager;
 import techgravy.nextstop.data.User;
 import techgravy.nextstop.ui.home.HomeActivity;
+import techgravy.nextstop.utils.Constants;
 import techgravy.nextstop.utils.ParallaxPagerTransformer;
 import timber.log.Timber;
 
@@ -71,6 +72,12 @@ import static timber.log.Timber.tag;
 
 public class LandingActivity extends AppCompatActivity {
 
+    public static final String ON_AUTH_STATE_CHANGED_SIGNED_OUT = "onAuthStateChanged: signed_out";
+    public static final String HANDLE_FACEBOOK_ACCESS_TOKEN = "handleFacebookAccessToken:";
+    public static final String FB_PIC_PARAMS = "picture.width(600).height(600),name,first_name";
+    public static final String Graph_FB = "https://graph.facebook.com/";
+    public static final String PICTURE_TYPE_LARGE = "/picture?type=large";
+    public static final String ON_AUTH_STATE_CHANGED_SIGNED_IN = "onAuthStateChanged: signed_in:";
     @BindView(R.id.pagerContainer)
     ViewPager pagerContainer;
     @BindView(R.id.radioBtnOne)
@@ -115,7 +122,7 @@ public class LandingActivity extends AppCompatActivity {
                 getProfile();
             } else {
                 // User is signed out
-                tag(TAG).d("onAuthStateChanged: signed_out");
+                tag(TAG).d(ON_AUTH_STATE_CHANGED_SIGNED_OUT);
             }
         };
         database = FirebaseDatabase.getInstance().getReference();
@@ -124,7 +131,7 @@ public class LandingActivity extends AppCompatActivity {
 
     private void initViews() {
         progressDialog = new ProgressDialog(LandingActivity.this);
-        progressDialog.setMessage("Authenticating..");
+        progressDialog.setMessage(getString(R.string.auth_loading));
         fragmentList = new ArrayList<>();
         checkPlayServices(LandingActivity.this);
         GettingStartedFragment page1 = GettingStartedFragment.newInstance(0);
@@ -216,19 +223,19 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-        tag(TAG).d("handleFacebookAccessToken:" + token);
+        tag(TAG).d(HANDLE_FACEBOOK_ACCESS_TOKEN + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
-                    tag(TAG).d("signInWithCredential:onComplete:" + task.isSuccessful());
+                    tag(TAG).d(getString(R.string.tag_signin) + task.isSuccessful());
 
                     // If sign in fails, display a message to the user. If sign in succeeds
                     // the auth state listener will be notified and logic to handle the
                     // signed in user can be handled in the listener.
                     if (!task.isSuccessful()) {
-                        tag(TAG).w("signInWithCredential", task.getException());
-                        Toast.makeText(LandingActivity.this, "Authentication failed.",
+                        tag(TAG).w(getString(R.string.tag_signin_failure), task.getException());
+                        Toast.makeText(LandingActivity.this, R.string.auth_failure,
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -237,7 +244,7 @@ public class LandingActivity extends AppCompatActivity {
 
     private void getProfile() {
 
-        String fields = "picture.width(600).height(600),name,first_name";
+        String fields = FB_PIC_PARAMS;
 
         ReactiveRequest
                 .getMe(fields) // get Profile
@@ -262,8 +269,8 @@ public class LandingActivity extends AppCompatActivity {
     private FacebookProfile parseProfile(GraphResponse response) throws IOException {
         String data = null;
         try {
-            data = response.getJSONObject().has("data") ?
-                    response.getJSONObject().get("data").toString() :
+            data = response.getJSONObject().has(Constants.DATA) ?
+                    response.getJSONObject().get(Constants.DATA).toString() :
                     response.getJSONObject().toString();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -272,14 +279,14 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void writeNewUser(FirebaseUser firebaseUser, FacebookProfile fbProfile) {
-        User user = new User("https://graph.facebook.com/" + fbProfile.getId() + "/picture?type=large", fbProfile.getName(), new ArrayList<>());
-        Timber.tag(TAG).d("onAuthStateChanged: signed_in:" + firebaseUser.getUid());
-        Query query = database.child("users").orderByChild(firebaseUser.getUid());
+        User user = new User(Graph_FB + fbProfile.getId() + PICTURE_TYPE_LARGE, fbProfile.getName(), new ArrayList<>());
+        Timber.tag(TAG).d(ON_AUTH_STATE_CHANGED_SIGNED_IN + firebaseUser.getUid());
+        Query query = database.child(Constants.USERS).orderByChild(firebaseUser.getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Timber.tag(TAG).d(dataSnapshot.toString());
-                database.child("users").child(firebaseUser.getUid()).setValue(user);
+                database.child(Constants.USERS).child(firebaseUser.getUid()).setValue(user);
                 SharedPrefManager prefManager = SharedPrefManager.getInstance(getApplicationContext());
                 prefManager.setAvatarUrl(user.getPhotoUrl());
                 prefManager.setUUID(firebaseUser.getUid());

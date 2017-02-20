@@ -29,6 +29,8 @@ import java.lang.reflect.Method;
  */
 public class ImeUtils {
 
+    public static final String SHOW_SOFT_INPUT_UNCHECKED = "showSoftInputUnchecked";
+
     private ImeUtils() { }
 
     public static void showIme(@NonNull View view) {
@@ -37,7 +39,7 @@ public class ImeUtils {
         // the public methods don't seem to work for me, so… reflection.
         try {
             Method showSoftInputUnchecked = InputMethodManager.class.getMethod(
-                    "showSoftInputUnchecked", int.class, ResultReceiver.class);
+                    SHOW_SOFT_INPUT_UNCHECKED, int.class, ResultReceiver.class);
             showSoftInputUnchecked.setAccessible(true);
             showSoftInputUnchecked.invoke(imm, 0, null);
         } catch (Exception e) {

@@ -43,7 +43,7 @@ public class GettingStartedFragment extends Fragment {
     int yellowGreen;
     private int page = -1;
     private Spanny spanny;
-    private static final String BUNDLE_TAG = "page_no";
+    private static final String BUNDLE_TAG = "page_no"; // cant be saved to strings , context prob
 
 
     public static GettingStartedFragment newInstance(int arg) {

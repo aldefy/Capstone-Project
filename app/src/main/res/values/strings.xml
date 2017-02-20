@@ -101,6 +101,11 @@
     <string name="rightNav">rightnav</string>
     <string name="connection_failure">connection failure</string>
     <string name="container_image">container image</string>
+    <string name="tag_signin">signInWithCredential:onComplete:</string>
+    <string name="tag_signin_failure">signInWithCredential</string>
+    <string name="auth_failure">Authentication failed.</string>
+    <string name="place_load">Place to be loaded =</string>
+    <string name="auth_loading">Authenticating..</string>
 
 </resources>
 

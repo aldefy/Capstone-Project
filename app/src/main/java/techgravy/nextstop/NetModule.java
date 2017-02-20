@@ -22,6 +22,7 @@ import timber.log.Timber;
 @Module
 public class NetModule {
 
+    public static final String API_TAG = "API_TAG";
     private String mBaseUrl;
     private String mApiKey;
 
@@ -48,7 +49,7 @@ public class NetModule {
         OkLogInterceptor okLogInterceptor =
                 OkLogInterceptor.builder()
                         .setLogInterceptor(url -> {
-                            Timber.tag("API_TAG").d(url);
+                            Timber.tag(API_TAG).d(url);
                             return true;
                         }).withAllLogData().build();
         OkHttpClient.Builder client = new OkHttpClient.Builder();
