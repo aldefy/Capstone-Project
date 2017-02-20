@@ -16,7 +16,7 @@
   -->
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -66,12 +66,13 @@
                 android:paddingStart="4dp">
 
                 <ImageButton
-                    android:id="@+id/searchback"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="?android:selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_arrow_back_padded"
-                    android:transitionName="@string/transition_search_back"/>
+                        android:id="@+id/searchback"
+                        android:layout_width="wrap_content"
+                        android:contentDescription="@string/search"
+                        android:layout_height="match_parent"
+                        android:background="?android:selectableItemBackgroundBorderless"
+                        app:srcCompat="@drawable/ic_arrow_back_padded"
+                        android:transitionName="@string/transition_search_back"/>
 
             </FrameLayout>
 
