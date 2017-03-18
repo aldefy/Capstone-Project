@@ -42,7 +42,7 @@
     <android.support.v7.widget.AppCompatTextView
             android:id="@+id/placeNickNameTextView"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
-            fontPath="fonts/Lato-Hairline.otf"
+            fontPath="fonts/Lato-Hairline.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dividerView"
