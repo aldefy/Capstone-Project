@@ -41,7 +41,7 @@
 
     <android.support.v7.widget.AppCompatTextView
             android:id="@+id/placeNickNameTextView"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             fontPath="fonts/Lato-Hairline.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +49,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="@dimen/spacing_normal"
             android:layout_marginTop="@dimen/spacing_normal"
+            android:textStyle="bold"
             android:clickable="false"
             android:maxLines="2"
             android:textColor="@color/primary_text"
